@@ -1,0 +1,9 @@
+<!-- <script src="assets/js/jquery-1.11.1.min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="assets/js/index.js"></script>
+<!-- <script src="assets/js/jquery.mobile-1.4.2.min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"></script>
+<script src="assets/js/jquery-cookies.min.js"></script>
+<script src="assets/js/base-config.js"></script>
+<!-- <script src="assets/js/angular-min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>

@@ -1,0 +1,6 @@
+	<modules>
+		<module>controle-admin</module>
+		<module>controle-core</module>
+		<module>controle-servico</module>
+		<module>RastreamentoCorreios</module>
+	</modules>
