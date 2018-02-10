@@ -19,4 +19,5 @@ This project has a goal to control a work order of a company.
 
 ## Improvements
 
-Work to make a generic system, like a logo, name, and others items are static.
+Working to make a generic system, such as a logo, name, and other items that are statics.
+Making others improvements in currently features.
