@@ -1,1 +1,0 @@
-$(function(){$(".subnavbar").find("li").each(function(e){var t=e%3;if(t===2){$(this).addClass("subnavbar-open-right")}})})
