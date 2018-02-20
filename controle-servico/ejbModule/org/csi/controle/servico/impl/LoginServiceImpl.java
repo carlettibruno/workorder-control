@@ -57,8 +57,8 @@ public class LoginServiceImpl implements LoginService {
 			}
 			
 			String senhaCriptografada = DadosUtil.criptografar(login.getUsuario(), login.getSenha());
-			Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.login = :usuario AND u.senha = :senha AND u.ativo = :ativo");
-			query.setParameter("usuario", login.getUsuario());
+			Query query = em.createQuery("SELECT u FROM Usuario u WHERE UPPER(u.login) = :usuario AND u.senha = :senha AND u.ativo = :ativo");
+			query.setParameter("usuario", login.getUsuario().toUpperCase());
 			query.setParameter("senha", senhaCriptografada);
 			query.setParameter("ativo", true);
 			Usuario usuario = (Usuario) query.getSingleResult();

@@ -17,7 +17,7 @@ public class DadosUtil {
 
 	public static void main(String[] args) {
 		try {
-			String senha = criptografar("luiz@twob.com.br", "123123");
+			String senha = criptografar("bruno.carletti", "123123");
 			System.out.println(senha);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

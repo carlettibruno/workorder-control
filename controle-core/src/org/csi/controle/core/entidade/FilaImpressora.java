@@ -2,7 +2,11 @@ package org.csi.controle.core.entidade;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -10,11 +14,16 @@ import javax.persistence.Table;
 public class FilaImpressora implements Serializable {
 
 	private static final long serialVersionUID = -6255532173496309244L;
-	
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ID_FILA_IMPRESSORA")
 	private Long idFilaImpressora;
 	
+	@Column(name="NUMBER_OS", nullable=false)
 	private Long numberOs;
 	
+	@Column(name="NUMBER_OF_COPIES", nullable=false)
 	private Integer numberOfCopies;
 
 	public Long getIdFilaImpressora() {

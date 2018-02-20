@@ -2,6 +2,7 @@ package org.csi.controle.servico.impl;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -11,7 +12,7 @@ import org.csi.controle.core.util.Codigo;
 import org.csi.controle.core.util.RetornoServico;
 import org.csi.controle.servico.FilaImpressoraService;
 
-
+@Stateless
 public class FilaImpressoraServiceImpl implements FilaImpressoraService {
 
 	@PersistenceContext(name="controlePU")
