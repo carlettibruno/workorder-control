@@ -4,6 +4,7 @@
 	<groupId>br.com.carlettisolucoes</groupId>
 	<artifactId>RastreamentoCorreios</artifactId>
 	<version>0.0.1</version>
+	<packaging>jar</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
