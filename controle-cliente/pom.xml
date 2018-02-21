@@ -6,6 +6,7 @@
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<build>
+		<finalName>controle-cliente</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
@@ -20,6 +21,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
+					<finalName>controle-cliente</finalName>
 					<warSourceDirectory>WebContent</warSourceDirectory>
 				</configuration>
 			</plugin>
