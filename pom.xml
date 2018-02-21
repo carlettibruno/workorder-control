@@ -10,12 +10,12 @@
     <name>Project to control workorders</name>
 
     <modules>
+				<module>RastreamentoCorreios</module>
+				<module>controle-core</module>
+				<module>controle-servico</module>
         <module>controle-admin</module>
         <module>controle-cliente</module>
-				<module>controle-core</module>
 				<module>controle-ear</module>
-				<module>controle-servico</module>
-				<module>RastreamentoCorreios</module>
     </modules>
 
     <build>
