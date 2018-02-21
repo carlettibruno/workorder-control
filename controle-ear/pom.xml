@@ -18,6 +18,11 @@
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 				</configuration>
 			</plugin>
+			<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>1.2.1.Final</version>
+			</plugin>
 		</plugins>
 	</build>
 
