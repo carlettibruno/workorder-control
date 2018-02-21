@@ -28,7 +28,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>RastreamentoCorreios</groupId>
+			<groupId>br.com.carlettisolucoes</groupId>
 			<artifactId>RastreamentoCorreios</artifactId>
 			<version>0.0.1</version>
 		</dependency>
