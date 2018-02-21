@@ -22,6 +22,12 @@
 					<groupId>org.wildfly.plugins</groupId>
 					<artifactId>wildfly-maven-plugin</artifactId>
 					<version>1.2.1.Final</version>
+					<configuration>
+						<username>${username}</username>
+						<password>${password}</password>
+		        <hostname>${hostname}</hostname>
+						<port>${port}</port>
+					</configuration>
 			</plugin>
 		</plugins>
 	</build>
