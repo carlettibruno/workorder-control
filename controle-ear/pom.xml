@@ -7,15 +7,44 @@
 	<packaging>ear</packaging>
 
 	<build>
+		<finalName>controle-ear</finalName>
 		<plugins>
+			<plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
 			<plugin>
 				<artifactId>maven-ear-plugin</artifactId>
 				<version>2.10</version>
 				<configuration>
+					<finalName>controle-ear</finalName>
 					<earSourceDirectory>EarContent</earSourceDirectory>
 					<generateApplicationXml>false</generateApplicationXml>
 					<version>6</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<modules>
+						<jarModule>
+							<groupId>br.com.carlettisolucoes</groupId>
+							<artifactId>controle-core</artifactId>
+						</jarModule>
+						<jarModule>
+							<groupId>br.com.carlettisolucoes</groupId>
+							<artifactId>RastreamentoCorreios</artifactId>
+						</jarModule>
+						<ejbModule>
+							<groupId>br.com.carlettisolucoes</groupId>
+							<artifactId>controle-servico</artifactId>
+							<bundleFileName>controle-servico.jar</bundleFileName>
+						</ejbModule>
+						<webModule>
+							<groupId>br.com.carlettisolucoes</groupId>
+							<artifactId>controle-admin</artifactId>
+							<bundleFileName>controle-admin.war</bundleFileName>
+						</webModule>
+					</modules>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -48,6 +77,7 @@
 			<groupId>br.com.carlettisolucoes</groupId>
 			<artifactId>controle-servico</artifactId>
 			<version>0.0.1</version>
+			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>br.com.carlettisolucoes</groupId>
