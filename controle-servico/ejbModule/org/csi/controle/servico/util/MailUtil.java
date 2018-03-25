@@ -30,7 +30,7 @@ public class MailUtil {
 		MimeMessage m = new MimeMessage(mailSession);
 		Address[] to = new InternetAddress[] {new InternetAddress(usuario.getEmail()) };
 		m.setRecipients(Message.RecipientType.TO, to);
-		m.setSubject("Lembrete de senha [Grafstock]");
+		m.setSubject("Lembrete de senha [Grafstock Festas]");
 		m.setSentDate(new java.util.Date());
 		conteudo = conteudo.replace("#USUARIO#", usuario.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#SENHA#", novaSenha).replace("#LOGIN#", usuario.getLogin());
 		m.setContent(conteudo,"text/html; charset=utf-8");
@@ -44,7 +44,7 @@ public class MailUtil {
 		MimeMessage m = new MimeMessage(mailSession);
 		Address[] to = new InternetAddress[] {new InternetAddress(cliente.getEmail()) };
 		m.setRecipients(Message.RecipientType.TO, to);
-		m.setSubject("Protocolo de entrega [Grafstock]");
+		m.setSubject("Protocolo de entrega [Grafstock Festas]");
 		m.setSentDate(new java.util.Date());
 		conteudo = conteudo.replace("#USUARIO#", cliente.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#ORDEM_SERVICO#", numeroOrdemServico);
 		

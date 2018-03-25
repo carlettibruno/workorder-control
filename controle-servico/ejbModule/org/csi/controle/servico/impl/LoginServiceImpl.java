@@ -14,9 +14,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.codehaus.jackson.type.TypeReference;
 import org.csi.controle.core.entidade.ChaveConfiguracao;
 import org.csi.controle.core.entidade.ClienteAcesso;
 import org.csi.controle.core.entidade.Configuracao;
@@ -33,6 +30,10 @@ import org.csi.controle.core.util.RetornoServico;
 import org.csi.controle.servico.ConfiguracaoService;
 import org.csi.controle.servico.LoginService;
 import org.csi.controle.servico.util.MailUtil;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 @Stateless
 public class LoginServiceImpl implements LoginService {

@@ -8,7 +8,7 @@
 		<div data-role="page" id="pageone" class="jqm-demos jqm-home">
 			<div data-role="header" class="jqm-header">
 				<h2>
-					<img src="assets/images/grafstock-logo.png" alt="Grafstock">
+					<img src="assets/images/grafstock-logo.png" alt="Grafstock Festas">
 				</h2>
 				<a href="lista_os.jsp" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-left">Voltar</a>
 			</div>

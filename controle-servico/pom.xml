@@ -50,7 +50,7 @@
 			<artifactId>resteasy-multipart-provider</artifactId>
 			<version>3.0.19.Final</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>		
 		<!-- <dependency> -->
 		<!-- <groupId>org.jboss.resteasy</groupId> -->
 		<!-- <artifactId>resteasy-jaxrs</artifactId> -->
@@ -98,5 +98,15 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.17</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.7.4</version>
+		</dependency>		
 	</dependencies>
 </project>

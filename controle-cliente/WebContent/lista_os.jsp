@@ -15,7 +15,7 @@
 					</form>
 				</div>
 				  <div data-role="header" class="jqm-header">
-					<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock"></h2>
+					<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock Festas"></h2>
 					<a href="#" class="jqm-navmenu-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 					<a href="#" id="btnPesquisar" class="jqm-search-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-search ui-nodisc-icon ui-alt-icon ui-btn-right">Search</a>
 				  </div>
@@ -47,7 +47,7 @@
 			<div ng-show="ordemServico != null && !verFoto">
 
 			  <div data-role="header" class="jqm-header">
-				<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock"></h2>
+				<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock Festas"></h2>
 				<a href="#" ng-click="ordemServico = null" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left">Voltar</a>
 				<a href="lista_os.jsp" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-right">Home</a>
 			  </div>
@@ -203,7 +203,7 @@
 
 			<div ng-show="ordemServico != null && verFoto">
 			  <div data-role="header" class="jqm-header">
-				<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock"></h2>
+				<h2><img src="assets/images/grafstock-logo.png" alt="Grafstock Festas"></h2>
 				<a href="#" ng-click="setVerFoto(false, null)" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left">Voltar</a>
 				<a href="lista_os.jsp" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-right">Home</a>
 			  </div>
