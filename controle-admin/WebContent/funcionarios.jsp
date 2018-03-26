@@ -39,7 +39,7 @@
 							<div class="control-group">											
 								<label class="control-label" for="username">Email</label>
 								<div class="controls">
-									<input type="text" class="span3" id="email" ng-required="true" value="alfredo@grafstock.com.br"  ng-model="funcionario.email">
+									<input type="text" class="span3" id="email" ng-required="true" ng-model="funcionario.email">
 								</div> <!-- /controls -->				
 							</div> <!-- /control-group -->			
 						</div>

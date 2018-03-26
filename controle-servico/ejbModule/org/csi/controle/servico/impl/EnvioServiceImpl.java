@@ -120,7 +120,8 @@ public class EnvioServiceImpl implements EnvioService {
 			if(isEntregador) {
 				RetornoServico<Configuracao> configLink = configuracaoService.obterConfiguracao(ChaveConfiguracao.LINK_CLIENTE.ordinal());
 				RetornoServico<Configuracao> raizFotos = configuracaoService.obterConfiguracao(ChaveConfiguracao.RAIZ_FOTOS.ordinal());
-				MailUtil.enviarEmailProtocolo(envioFoto.getOrdemServico().getCliente(), envioFoto.getOrdemServico().getNumero(), configLink.getData().getValor(), new File(raizFotos.getData().getValor() + foto.getCaminho()), mailSession);
+				RetornoServico<Configuracao> caminhoBase = configuracaoService.obterConfiguracao(ChaveConfiguracao.CAMINHO_BASE.ordinal());
+				MailUtil.enviarEmailProtocolo(envioFoto.getOrdemServico().getCliente(), envioFoto.getOrdemServico().getNumero(), configLink.getData().getValor(), new File(raizFotos.getData().getValor() + foto.getCaminho()), caminhoBase.getData().getValor(), mailSession);
 				foto.setAprovada(true);
 			}
 			foto.setEnvioFoto(envioFoto);

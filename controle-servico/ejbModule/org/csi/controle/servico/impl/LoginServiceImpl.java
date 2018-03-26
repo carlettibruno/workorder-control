@@ -167,8 +167,9 @@ public class LoginServiceImpl implements LoginService {
 				}
 				if(configLink.getCodigo().intValue() != Codigo.SUCESSO) {
 					throw new Exception(configLink.getMensagem());
-				}					
-				MailUtil.enviarEmailSenha(usuario, configLink.getData().getValor(), novaSenha, mailSession);
+				}
+				RetornoServico<Configuracao> caminhoBase = configuracaoService.obterConfiguracao(ChaveConfiguracao.CAMINHO_BASE.ordinal());
+				MailUtil.enviarEmailSenha(usuario, configLink.getData().getValor(), novaSenha, caminhoBase.getData().getValor(), mailSession);
 			}
 			retorno = new RetornoServico<String>(Codigo.SUCESSO, "Email enviado com sucesso para "+email, null);
 		} catch (Exception e) {

@@ -46,7 +46,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 				if(config.getCodigo().intValue() != Codigo.SUCESSO) {
 					throw new Exception(config.getMensagem());
 				}
-				MailUtil.enviarEmailSenha(usuario, config.getData().getValor(), senha, mailSession);
+				RetornoServico<Configuracao> caminhoBase = configService.obterConfiguracao(ChaveConfiguracao.CAMINHO_BASE.ordinal());
+				MailUtil.enviarEmailSenha(usuario, config.getData().getValor(), senha, caminhoBase.getData().getValor(), mailSession);
 			}
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {

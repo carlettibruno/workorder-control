@@ -34,6 +34,28 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>1.1.0.Final</version>
+						<configuration>
+							<hostname>localhost</hostname>
+							<port>9990</port>
+							<name>controle-admin</name>
+							<username>bruno</username>
+							<password>deployguy</password>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>br.com.carlettisolucoes</groupId>
@@ -56,6 +78,6 @@
 			<artifactId>javax.ejb-api</artifactId>
 			<version>3.2</version>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

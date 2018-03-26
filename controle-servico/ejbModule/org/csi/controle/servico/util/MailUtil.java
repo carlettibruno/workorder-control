@@ -23,7 +23,7 @@ import org.csi.controle.core.entidade.Usuario;
 
 public class MailUtil {
 	
-	public static void enviarEmailSenha(Usuario usuario, String linkCliente, String novaSenha, Session mailSession) throws Exception {
+	public static void enviarEmailSenha(Usuario usuario, String linkCliente, String novaSenha, String caminhoBase, Session mailSession) throws Exception {
         ClassLoader loader = MailUtil.class.getClassLoader(); 
         InputStream in = loader.getResourceAsStream("layout_email.html");
         String conteudo = FileUtil.readString(in);
@@ -32,12 +32,12 @@ public class MailUtil {
 		m.setRecipients(Message.RecipientType.TO, to);
 		m.setSubject("Lembrete de senha [Grafstock Festas]");
 		m.setSentDate(new java.util.Date());
-		conteudo = conteudo.replace("#USUARIO#", usuario.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#SENHA#", novaSenha).replace("#LOGIN#", usuario.getLogin());
+		conteudo = conteudo.replace("#USUARIO#", usuario.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#SENHA#", novaSenha).replace("#LOGIN#", usuario.getLogin()).replace("#CAMINHO_BASE#", caminhoBase);
 		m.setContent(conteudo,"text/html; charset=utf-8");
 		Transport.send(m);
 	}
 	
-	public static void enviarEmailProtocolo(Cliente cliente, String numeroOrdemServico, String linkCliente, File protocolo, Session mailSession) throws Exception {
+	public static void enviarEmailProtocolo(Cliente cliente, String numeroOrdemServico, String linkCliente, File protocolo, String caminhoBase, Session mailSession) throws Exception {
         ClassLoader loader = MailUtil.class.getClassLoader(); 
         InputStream in = loader.getResourceAsStream("layout_email_protocolo.html");
         String conteudo = FileUtil.readString(in);
@@ -46,7 +46,7 @@ public class MailUtil {
 		m.setRecipients(Message.RecipientType.TO, to);
 		m.setSubject("Protocolo de entrega [Grafstock Festas]");
 		m.setSentDate(new java.util.Date());
-		conteudo = conteudo.replace("#USUARIO#", cliente.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#ORDEM_SERVICO#", numeroOrdemServico);
+		conteudo = conteudo.replace("#USUARIO#", cliente.getNome().toUpperCase()).replace("#LINK_CLIENTE#", linkCliente).replace("#ORDEM_SERVICO#", numeroOrdemServico).replace("#CAMINHO_BASE#", caminhoBase);
 		
 		Multipart multipart = new MimeMultipart();
 		
