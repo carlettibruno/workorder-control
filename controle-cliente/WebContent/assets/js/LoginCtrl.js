@@ -1,6 +1,6 @@
 function LoginCtrl($scope, $http, $window) {
 	
-	$scope.login = null;
+	$scope.login = {usuario:'',senha:''};
 	$scope.esqueciMinhaSenha = false;
 	$scope.retorno = null;
 
@@ -14,6 +14,8 @@ function LoginCtrl($scope, $http, $window) {
 				}
 				$.mobile.loading("hide");
 			});		
+		} else {
+			$.mobile.loading("hide");
 		}
 	};
 	$scope.onload();

@@ -8,7 +8,7 @@
 		<div data-role="page" id="pageone"  class="jqm-demos jqm-home">
 			<div data-role="header" class="jqm-header">
 				<h2>
-					<img src="assets/images/grafstock-logo.png" alt="Grafstock Festas">
+					<img src="assets/images/grafstock-logo.jpg" alt="Grafstock Festas">
 				</h2>
 				<a href="#" data-ajax="false" ng-click="mudarEsqueciMinhaSenha();" ng-show="esqueciMinhaSenha" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left">Voltar</a>
 			</div>
@@ -33,5 +33,5 @@
 		</div> 
 	</body>
 	<jsp:include page="scripts.jsp"></jsp:include>
-	<script src="assets/js/LoginCtrl.js?v20140819"></script>
+	<script src="assets/js/LoginCtrl.js?v20180403"></script>
 </html>
