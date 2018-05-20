@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app>
 	<head>
-		<jsp:include page="head.jsp"></jsp:include>	
+		<jsp:include page="head.jsp"></jsp:include>
 	</head>
 	<body ng-controller="AlterarSenhaCtrl" ng-cloak>
 		<div data-role="page" id="pageone" class="jqm-demos jqm-home">
@@ -12,7 +12,7 @@
 				</h2>
 				<a href="lista_os.jsp" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-home ui-nodisc-icon ui-alt-icon ui-btn-left">Voltar</a>
 			</div>
-	
+
 			<div role="main" class="ui-content">
 				<div class="alert alert-error" ng-show="retorno.codigo > 0">
 					<strong>Falha!</strong> {{retorno.mensagem}}
@@ -21,8 +21,8 @@
 					<strong>Sucesso!</strong> {{retorno.mensagem}}
 				</div>
 				<form ng-submit="alterarSenha()">
-					<input type="password" name="senha" id="senha" placeholder="Senha atual" ng-model="login.senha" /> 
-					<input type="password" name="senha" id="senha" placeholder="Senha" ng-model="login.senhaNova" /> 
+					<input type="password" name="senha" id="senha" placeholder="Senha atual" ng-model="login.senha" />
+					<input type="password" name="senha" id="senha" placeholder="Senha" ng-model="login.senhaNova" />
 					<input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Confirmar Senha" ng-model="login.senhaNovaConfirmacao" />
 					<button type="submit" class="ui-shadow ui-btn ui-corner-all">Alterar senha</button>
 				</form>

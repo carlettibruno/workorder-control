@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app>
 	<head>
@@ -59,7 +59,7 @@
 						<h2 ng-show="ordemServico.status != 'Aberto'">OS {{ordemServico.numero}} <span class="osFechada">({{ordemServico.status}})</span></h2>
 						<h2 ng-show="ordemServico.status == 'Aberto'">OS {{ordemServico.numero}} <span class="osAberta">({{ordemServico.status}})</span></h2>
 						<p>{{ordemServico.descricao}}</p>
-						<p ng-hide="ordemServico.previsaoEntrega == null || ordemServico.previsaoEntrega == ''">Previs�o entrega <b>{{ordemServico.previsaoEntrega | date: 'dd/MM/yyyy'}}</b></p>
+						<p ng-hide="ordemServico.previsaoEntrega == null || ordemServico.previsaoEntrega == ''">Previsão entrega <b>{{ordemServico.previsaoEntrega | date: 'dd/MM/yyyy'}}</b></p>
 						<p class="ui-li-aside">{{ordemServico.dataCriacao | date: 'dd/MM/yyyy'}}</p>
 					</li>
 					<li data-role="list-divider">
@@ -73,7 +73,7 @@
 							</div>
 							<div class="row" ng-show="fotos.length == 0">
 								<div class="col-lg-4">
-									N�o dispon�vel.
+									Não disponível.
 								</div>
 							</div>
 						</li>
@@ -83,13 +83,13 @@
 						<h1>Informa&ccedil;&otilde;es da nota</h1>
 						<li>
 							<div class="row" ng-show="ordemServico.notaFiscal != null">
-								<div class="col-lg-4">N�mero</div>
+								<div class="col-lg-4">Número</div>
 								<div class="col-lg-8"><b>{{ordemServico.notaFiscal.numero}}</b></div>
 								<div class="col-lg-4">Valor</div>
 								<div class="col-lg-8"><b>R$ {{ordemServico.notaFiscal.valor}}</b></div>
 								<div class="col-lg-4">Paga</div>
 								<div class="col-lg-8" ng-show="ordemServico.notaFiscal.paga"><b>Sim</b></div>
-								<div class="col-lg-8" ng-show="!ordemServico.notaFiscal.paga"><b>N�o</b></div>
+								<div class="col-lg-8" ng-show="!ordemServico.notaFiscal.paga"><b>Não</b></div>
 							</div>
 							<div class="row" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
 								<div class="col-lg-4" ng-show="{{$index == 0}}">Vencimentos</div>
@@ -98,14 +98,14 @@
 							</div>
 							<div class="row" ng-show="ordemServico.notaFiscal == null">
 								<div class="col-lg-4">
-									N�o ainda dispon�vel, trabalho em produ��o.
+									Não ainda disponível, trabalho em produção.
 								</div>
 							</div>
 						</li>
 					</li>
 
 					<li data-role="list-divider">
-						<h1>Endere&ccedil;os de entrega</h1>
+						<h1>Endereços de entrega</h1>
 						<li ng-show="enderecos == null">
 							<div class="row">
 								<div class="col-lg-12">
@@ -116,7 +116,7 @@
 						<li ng-show="enderecos.length == 0">
 							<div class="row">
 								<div class="col-lg-12">
-									N�o dispon�vel.
+									Não disponível.
 								</div>
 							</div>
 						</li>
@@ -133,7 +133,7 @@
 								</div>
 							</div>
 							<div class="row" ng-show="endereco.show">
-								<div class="col-lg-12" ng-show="endereco.referenciasEntrega.length == 0">N�o dispon�vel.</div>
+								<div class="col-lg-12" ng-show="endereco.referenciasEntrega.length == 0">Não disponível.</div>
 								<div ng-repeat="re in endereco.referenciasEntrega" style="margin:2%; border-top: 1px solid #666;">
 									<div class="row">
 										<div class="col-lg-3">Tipo entrega</div>
@@ -144,7 +144,7 @@
 										<div class="col-lg-7"><b>{{re.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}</b></div>
 									</div>
 									<div class="row" ng-show="re.codigoReferencia != ''">
-										<div class="col-lg-3">Refer�ncia</div>
+										<div class="col-lg-3">Referência</div>
 										<div class="col-lg-7"><b>{{re.codigoReferencia}}</b></div>
 										<div class="col-lg-10" ng-show="re.tipoEntrega == 'CORREIOS'">
 											<div ng-repeat="e in re.eventos" style="padding: 2%;">
@@ -170,7 +170,7 @@
 						<li ng-show="historicos.length == 0">
 							<div class="row">
 								<div class="col-lg-12">
-									N�o dispon�vel.
+									Não disponível.
 								</div>
 							</div>
 						</li>
@@ -181,15 +181,15 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-lg-4">In�cio</div>
+								<div class="col-lg-4">Início</div>
 								<div class="col-lg-8"><b>{{historico.dataInicio | date: 'dd/MM/yyyy HH:mm:ss'}}</b></div>
 							</div>
 							<div class="row">
 								<div class="col-lg-4" ng-show="historico.status == 'Em andamento'">Executando</div>
-								<div class="col-lg-4" ng-show="historico.status != 'Em andamento'">T�rmino</div>
+								<div class="col-lg-4" ng-show="historico.status != 'Em andamento'">Término</div>
 								<div class="col-lg-8">
 									<b>
-										<i ng-show="historico.status == 'Em andamento'">H� {{historico.diferencaDatas}}</i>
+										<i ng-show="historico.status == 'Em andamento'">Há {{historico.diferencaDatas}}</i>
 										<span ng-show="historico.status != 'Em andamento'">{{historico.dataFim | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
 									</b>
 								</div>

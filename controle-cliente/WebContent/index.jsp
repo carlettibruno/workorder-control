@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app>
 	<head>
 		<jsp:include page="head.jsp"></jsp:include>
 	</head>
-	<body ng-controller="LoginCtrl" onload="jQuery('#username').focus();" ng-cloak>		
+	<body ng-controller="LoginCtrl" onload="jQuery('#username').focus();" ng-cloak>
 		<div data-role="page" id="pageone"  class="jqm-demos jqm-home">
 			<div data-role="header" class="jqm-header">
 				<h2>
@@ -18,9 +18,9 @@
 				</div>
 				<div class="alert alert-success" ng-show="retorno.codigo == 0">
 					<strong>Sucesso!</strong> {{retorno.mensagem}}
-				</div>			
+				</div>
 			  	<form ng-submit="entrar()" ng-show="!esqueciMinhaSenha">
-					<input type="text" name="usuario" id="username" placeholder="Usuário" ng-model="login.usuario">
+					<input type="text" name="usuario" id="username" placeholder="UsuÃ¡rio" ng-model="login.usuario">
 					<input type="password" name="senha" id="senha" placeholder="Senha" ng-model="login.senha">
 					<button href="#" type="submit" class="ui-shadow ui-btn ui-corner-all">Entrar</button>
 					<a href="#" data-ajax="false" ng-click="mudarEsqueciMinhaSenha();" class="ui-shadow ui-btn ui-corner-all">Esqueci minha senha</a>
@@ -30,7 +30,7 @@
 					<button href="#" type="submit" data-ajax="false" class="ui-shadow ui-btn ui-corner-all">Enviar senha por email</button>
 				</form>
 			</div>
-		</div> 
+		</div>
 	</body>
 	<jsp:include page="scripts.jsp"></jsp:include>
 	<script src="assets/js/LoginCtrl.js?v20180403"></script>
