@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app="app">
 <head>
-<title>Administração - Alterar senha</title>
+<title>AdministraÃ§Ã£o - Alterar senha</title>
 <jsp:include page="head.jsp"></jsp:include>
 </head>
 <body ng-cloak>
@@ -30,48 +30,48 @@
 			<div class="container">
 				<div class="row">
 					<div class="span6">
-						<div class="control-group">											
+						<div class="control-group">
 							<label class="control-label" for="username">Senha atual</label>
 							<div class="controls">
 								<input type="password" class="span3" placeholder="Senha atual" ng-model="login.senha" />
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->					
-						
-						<div class="control-group">											
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
+
+						<div class="control-group">
 							<label class="control-label" for="username">Nova senha</label>
 							<div class="controls">
 								<input type="password" class="span3" placeholder="Nova senha" ng-model="login.senhaNova" />
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->	
-						<div class="control-group">											
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
+						<div class="control-group">
 							<label class="control-label" for="username">Redigite a nova senha</label>
 							<div class="controls">
 								<input type="password" class="span3" placeholder="Redigite a nova senha" ng-model="login.senhaNovaConfirmacao" />
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
 					</div>
             </div>
-            <!-- /widget-content --> 
+            <!-- /widget-content -->
           </div>
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">Alterar senha</button> <button class="btn" href="inicio.jsp">Cancelar</button>
-			</div>		  
-			</form>					
-          <!-- /widget --> 
+			</div>
+			</form>
+          <!-- /widget -->
         </div>
         <!-- /span6 -->
       </div>
-      <!-- /row --> 
+      <!-- /row -->
     </div>
-    <!-- /container --> 
+    <!-- /container -->
   </div>
-  <!-- /main-inner --> 
+  <!-- /main-inner -->
 </div>
 <!-- /main -->
 <!-- Le javascript
-================================================== --> 
-<!-- Placed at the end of the document so the pages load faster --> 
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/AlterarSenhaCtrl.js?v20140819"></script> 
+<script src="js/AlterarSenhaCtrl.js?v20140819"></script>
 </body>
 </html>

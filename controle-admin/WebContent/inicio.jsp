@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app="app">
 <head>
-<title>Administração</title>
+<title>AdministraÃ§Ã£o</title>
 <jsp:include page="head.jsp"></jsp:include>
 </head>
 <body ng-cloak>
@@ -14,28 +14,28 @@
         <div class="span12">
           <div class="widget">
             <div class="widget-header"> <i class="icon-home"></i>
-              <h3> Início</h3>
+              <h3> InÃ­cio</h3>
             </div>
             <!-- /widget-header -->
 			<div class="widget-content">
 				Bem-vindo ao sistema.
             </div>
-            <!-- /widget-content --> 
+            <!-- /widget-content -->
           </div>
-          <!-- /widget --> 
+          <!-- /widget -->
         </div>
         <!-- /span6 -->
       </div>
-      <!-- /row --> 
+      <!-- /row -->
     </div>
-    <!-- /container --> 
+    <!-- /container -->
   </div>
-  <!-- /main-inner --> 
+  <!-- /main-inner -->
 </div>
 <!-- /main -->
 <!-- Le javascript
-================================================== --> 
+================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<jsp:include page="scripts.jsp"></jsp:include> 
+<jsp:include page="scripts.jsp"></jsp:include>
 </body>
 </html>

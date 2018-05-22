@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app="app">
 <head>
-<title>Administração - Serviços</title>
+<title>AdministraÃ§Ã£o - ServiÃ§os</title>
 <jsp:include page="head.jsp"></jsp:include>
 </head>
 <body ng-cloak>
@@ -14,19 +14,19 @@
         <div class="span12">
           <div class="widget">
             <div class="widget-header"> <i class="icon-truck"></i>
-              <h3> Serviços</h3>
+              <h3> ServiÃ§os</h3>
             </div>
-            
+
 			<div class="widget-content" ng-show="exibirImportar">
 				<div class="container">
 					<div class="row">
 						<div class="span6">
-							<div class="control-group">											
-								<label class="control-label" for="username">Escolher arquivo de importação</label>
+							<div class="control-group">
+								<label class="control-label" for="username">Escolher arquivo de importaÃ§Ã£o</label>
 								<div class="controls">
 									<input type="file" ng-file-select="onPlanilhaSelect($files)" />
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->		
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
 						</div>
 						<div class="span6" ng-show="importando">
 							<div class="progress progress-striped active span5">
@@ -35,27 +35,27 @@
 							<br/>
 							<br/>
 							<center>
-							<p>{{envio.qtdeCarregada}} de {{envio.total}} serviços</p>
+							<p>{{envio.qtdeCarregada}} de {{envio.total}} serviÃ§os</p>
 							</center>
 						</div>
 					</div>
 				</div>
 				<div class="form-actions">
-					<button type="submit" ng-click="importarServicos()" class="btn btn-primary" id="btnIniciarImportacao" ng-disabled="importando">Iniciar importação</button>
+					<button type="submit" ng-click="importarServicos()" class="btn btn-primary" id="btnIniciarImportacao" ng-disabled="importando">Iniciar importaÃ§Ã£o</button>
 					<button class="btn btnCancelar" ng-disabled="importando" ng-click="exibirImportar = false">Cancelar</button>
-				</div>				
-			</div>	            
-            
+				</div>
+			</div>
+
             <!-- /widget-header -->
 			<div id="divVisualizarServico" class="widget-content" ng-show="ordemServico != null && !exibirImportar">
 				<div class="alert alert-success" ng-show="retorno.codigo == 0">
 				  <button type="button" class="close" data-dismiss="alert">&times;</button>
-				  <strong>Sucesso!</strong> {{retorno.mensagem}} <a href="servicos.jsp">Clique aqui</a> para listar os serviços.
+				  <strong>Sucesso!</strong> {{retorno.mensagem}} <a href="servicos.jsp">Clique aqui</a> para listar os serviÃ§os.
 				</div>
 				<div class="alert alert-error" ng-show="retorno.codigo > 0">
 				  <button type="button" class="close" data-dismiss="alert">&times;</button>
 				  <strong>Falha!</strong> {{retorno.mensagem}}
-				</div>            
+				</div>
 				<div class="container">
 					<div class="row">
 						<div class="span5">
@@ -63,59 +63,59 @@
 							<p>Email <b>{{ordemServico.email}}</b></p>
 							<p>N&uacute;mero da ordem de servi&ccedil;o <b>{{ordemServico.numero}}</b></p>
 							<p ng-show="visualizar">Descri&ccedil;&atilde;o do servi&ccedil;o <b>{{ordemServico.descricao}}</b></p>
-							<p ng-show="visualizar">Previsão de entrega <b>{{ordemServico.previsaoEntrega | date : 'dd/MM/yyyy'}}</b></p>
-							
+							<p ng-show="visualizar">PrevisÃ£o de entrega <b>{{ordemServico.previsaoEntrega | date : 'dd/MM/yyyy'}}</b></p>
+
 							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="descricao">Descri&ccedil;&atilde;o do servi&ccedil;o</label>
 								<div class="controls">
 									<input type="text" class="span3" id="descricao" ng-model="ordemServico.descricao">
-								</div> <!-- /controls -->				
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
-							<div class="control-group" ng-show="!visualizar">											
-								<label class="control-label" for="previsao">Previsão de entrega</label>
+							<div class="control-group" ng-show="!visualizar">
+								<label class="control-label" for="previsao">PrevisÃ£o de entrega</label>
 								<div class="controls">
 									<input type="date" ng-model="ordemServico.previsaoEntrega" id="previsao" placeholder="dd/MM/yyyy" min="2013-01-01" max="2020-12-31" />
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->							
-							<div class="control-group" ng-show="!visualizar">											
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
+							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="descricao">Alterar status</label>
 								<div class="controls">
 									<select ng-model="etapa" ng-options="etapa.nome for etapa in etapas"></select>
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->							
-							
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
+
 							<br>
 							<label class="control-label"><i class="icon-list"></i> Hist&oacute;rico <b>({{ordemServico.diferencaDatas}})	</b></label>
-							
+
 							<div class="row" ng-repeat="historico in historicos">
 								<div class="span6">
 									<h4>{{historico.etapa.nome}} <span ng-show="historico.status != 'Em andamento'" class="osFechada">({{historico.status}})</span><span ng-show="historico.status == 'Em andamento'" class="osAberta">({{historico.status}})</span</h4>
 								</div>
 								<div class="span1">In&iacute;cio</div>
 								<div class="span4"><b>{{historico.dataInicio | date: 'dd/MM/yyyy HH:mm:ss'}}</b></div>
-								<div class="span1" ng-show="historico.status == 'Em andamento'">Execução</div>
-								<div class="span1" ng-show="historico.status != 'Em andamento'">Término</div>
+								<div class="span1" ng-show="historico.status == 'Em andamento'">ExecuÃ§Ã£o</div>
+								<div class="span1" ng-show="historico.status != 'Em andamento'">TÃ©rmino</div>
 								<div class="span4">
-									<i ng-show="historico.status == 'Em andamento'"><b>Há {{historico.diferencaDatas}}</b></i>
+									<i ng-show="historico.status == 'Em andamento'"><b>HÃ¡ {{historico.diferencaDatas}}</b></i>
 									<span ng-show="historico.status != 'Em andamento'"><b>{{historico.dataFim | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
 								</div>
-							</div>						
+							</div>
 						</div>
-						
+
 						<div class="span7">
 							<div class="span7">
 								<label class="control-label"><i class="icon-picture"></i> Fotos</label>
 								<div class="controls span6" ng-show="fotos.length == 0">
-									Não disponível
+									NÃ£o disponÃ­vel
 								</div>
 								<div class="span1 thumbnail" ng-repeat="foto in fotos" ng-class="{thumbaprovado: foto.aprovada, thumbreprovado: !foto.aprovada}">
 									<img class="span1" ng-src="{{foto.caminhoCompletoThumb}}" href="#modalImagem" role="button" data-toggle="modal" ng-click="setVerFoto(true, foto)" title="{{foto.nome}}" />
 									<i ng-show="!visualizar" ng-click="apagarFoto(foto)" class="icon-trash" style="float:left; cursor: pointer;" title="Excluir imagem"></i>
 									<div ng-show="!visualizar" style="width: 60%; float:left; font-size: 0.6em; padding: 1px; text-overflow: ellipsis; overflow: hidden;" title="{{foto.nome}}">{{foto.nome}}</div>
-									<i ng-show="!visualizar" href="#modalImagem" role="button" data-toggle="modal" class="icon-search" style="float: right;  cursor: pointer;" title="Ver imagem" ng-click="setVerFoto(true, foto)"></i>									
+									<i ng-show="!visualizar" href="#modalImagem" role="button" data-toggle="modal" class="icon-search" style="float: right;  cursor: pointer;" title="Ver imagem" ng-click="setVerFoto(true, foto)"></i>
 								</div>
 							</div>
-							<div class="control-group span6" ng-show="!visualizar">											
+							<div class="control-group span6" ng-show="!visualizar">
 								<label class="control-label" for="username">Fotos</label>
 								<div class="controls">
 									<input type="file" class="span3" ng-file-select="onFileSelect($files)" multiple><br>
@@ -127,14 +127,14 @@
 										<td><a href="#" ng-click="apagarFotoAdicionada(foto)" class="shortcut" style="text-decoration: none;" title="Apagar"><i class="shortcut-icon icon-remove-sign"></i></a></td>
 									</tr>
 									</tbody>
-								</table>												
+								</table>
 							</div> <!-- /control-group -->
-															
+
 							<div class="control-group span7">
-								<label class="control-label"><i class="icon-road"></i> Endereços de entrega &nbsp;&nbsp;&nbsp;&nbsp;<a href="#modalEndereco" ng-click="criarEndereco()" data-toggle="modal" ng-show="!visualizar"><i class="icon-plus"></i> Adicionar</a></label>
+								<label class="control-label"><i class="icon-road"></i> EndereÃ§os de entrega &nbsp;&nbsp;&nbsp;&nbsp;<a href="#modalEndereco" ng-click="criarEndereco()" data-toggle="modal" ng-show="!visualizar"><i class="icon-plus"></i> Adicionar</a></label>
 								<div class="controls span5" ng-show="enderecos.length == 0">
-									Não disponível
-								</div>								
+									NÃ£o disponÃ­vel
+								</div>
 								<div class="controls span6">
 									<input type="file" class="span3" ng-file-select="onPlanilhaSelect($files)" ng-show="!visualizar">
 									<div class="accordion" id="accordion2">
@@ -158,7 +158,7 @@
 											</div>
 											<div id="endereco{{endereco.idEndereco}}" class="accordion-body collapse">
 												<div class="accordion-inner">
-													<div ng-show="endereco.referenciasEntrega.length == 0">Não disponível.</div>
+													<div ng-show="endereco.referenciasEntrega.length == 0">NÃ£o disponÃ­vel.</div>
 													<div ng-repeat="re in endereco.referenciasEntrega">
 														{{re.tipoEntrega}} ({{re.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}) <span ng-show="re.codigoReferencia != ''"><b>{{re.codigoReferencia}}</b></span>
 														<table ng-show="re.tipoEntrega == 'CORREIOS'">
@@ -170,19 +170,19 @@
 													</div>
 												</div>
 											</div>
-										</div>									
+										</div>
 									</div>
-								</div> <!-- /controls -->	
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
-							
+
 							<div class="control-group span7">
 								<label class="control-label">
-									<i class="icon-money"></i> Informações da nota &nbsp;&nbsp;&nbsp;&nbsp;
+									<i class="icon-money"></i> InformaÃ§Ãµes da nota &nbsp;&nbsp;&nbsp;&nbsp;
 									<a href="#modalNotaFiscal" data-toggle="modal" ng-show="!visualizar && ordemServico.notaFiscal == null"><i class="icon-magic"></i> Criar</a>
 									<a href="#modalNotaFiscal" data-toggle="modal" ng-show="!visualizar && ordemServico.notaFiscal != null"><i class="icon-edit"></i> Alterar</a>
 								</label>
 								<div class="controls span5" ng-show="ordemServico.notaFiscal == null">
-									Não disponível
+									NÃ£o disponÃ­vel
 								</div>
 								<div class="controls span5" ng-show="ordemServico.notaFiscal != null">
 									<div class="span1">N&uacute;mero</div>
@@ -191,32 +191,32 @@
 									<div class="span3"><b>R$ {{ordemServico.notaFiscal.valor}}</b></div>
 									<div class="span1">Paga</div>
 									<div class="span3" ng-show="ordemServico.notaFiscal.paga"><b>Sim</b></div>
-									<div class="span3" ng-show="!ordemServico.notaFiscal.paga"><b>Não</b></div>					
+									<div class="span3" ng-show="!ordemServico.notaFiscal.paga"><b>NÃ£o</b></div>
 								</div> <!-- /controls -->
 								<div class="controls span5" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
 									<div class="span1"><span ng-show="{{$index == 0}}">Vencimentos</span><span ng-show="{{$index > 0}}">&nbsp;</span></div>
 									<div class="span3"><b>{{detalheNota.dataVencimento | date: 'dd/MM/yyyy'}}</b></div>
-								</div>	
-							</div> <!-- /control-group -->							
-							
-						</div>				
+								</div>
+							</div> <!-- /control-group -->
+
+						</div>
 					</div>
 				</div>
 				<div class="form-actions">
 					<img src="img/ajax-loader.gif" ng-show="salvando || carregandoFotos || carregandoEndereco">
-					<button class="btn btn-primary" type="button" ng-click="alterar(ordemServico)" ng-show="visualizar">Editar serviço</button>
+					<button class="btn btn-primary" type="button" ng-click="alterar(ordemServico)" ng-show="visualizar">Editar serviÃ§o</button>
 					<button class="btn btn-primary" type="button" ng-click="salvar(ordemServico)" ng-show="!visualizar" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Salvar</button>
 					<button class="btn" type="button" ng-click="ordemServico = null;" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Voltar</button>
-						
+
 					<span ng-show="salvando || carregandoFotos || carregandoEndereco || carregandoEtapa">Aguarde... </span>
 					<span ng-show="salvando && !carregandoEndereco && !carregandoEtapa && !carregandoFotos">Salvando OS.</span>
-					<span ng-show="carregandoEndereco">Carregando endereços.</span>
+					<span ng-show="carregandoEndereco">Carregando endereÃ§os.</span>
 					<span ng-show="!carregandoEndereco && carregandoEtapa">Carregando etapa.</span>
-					<span ng-show="!carregandoEndereco && !carregandoEtapa && carregandoFotos">Carregando fotos.</span>					
-						
-				</div>				
-			</div>			
-			
+					<span ng-show="!carregandoEndereco && !carregandoEtapa && carregandoFotos">Carregando fotos.</span>
+
+				</div>
+			</div>
+
 			<div id="modalImagem" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
@@ -227,7 +227,7 @@
 					<center>
 						<img ng-src="{{foto.caminhoCompleto}}" style="max-width: 100%; max-height: 100%;" />
 					</center>
-				</div>									
+				</div>
 				<div class="modal-footer">
 					<button class="btn" ng-click="fotoAnterior()"><</button>
 					<b>{{fotos.indexOf(foto) + 1}}</b> de {{fotos.length}}
@@ -237,132 +237,132 @@
 					<button class="btn btn-success" style="float: left;" ng-show="!foto.aprovada" ng-click="manterAprovacao(foto)"><i class="icon-thumbs-up"></i> Aprovar</button>
 					<button class="btn btn-warning" style="float: left;" ng-show="foto.aprovada" ng-click="manterAprovacao(foto)"><i class="icon-thumbs-down"></i> Reprovar</button>
 					<img style="float: left;" src="img/ajax-loader.gif" ng-show="carregandoAprovacao">
-				</div>									
+				</div>
 			</div>
-			
+
 			<div id="modalEndereco" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-					<h3 id="myModalLabel">Endereço</h3>
+					<h3 id="myModalLabel">EndereÃ§o</h3>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal">
-						<div class="control-group">											
-							<label class="control-label" for="txtEndereco">Endereço</label>
+						<div class="control-group">
+							<label class="control-label" for="txtEndereco">EndereÃ§o</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtEndereco" ng-model="endereco.endereco">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
-							<label class="control-label" for="txtTitulo">Título</label>
+
+						<div class="control-group">
+							<label class="control-label" for="txtTitulo">TÃ­tulo</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtTitulo" ng-model="endereco.titulo">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
+
+						<div class="control-group">
 							<label class="control-label" for="txtCep">CEP</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtCep" ng-model="endereco.cep">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
+
+						<div class="control-group">
 							<label class="control-label" for="txtComplemento">Complemento</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtComplemento" ng-model="endereco.complemento">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
+
+						<div class="control-group">
 							<label class="control-label" for="txtBairro">Bairro</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtBairro" ng-model="endereco.bairro">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
+
+						<div class="control-group">
 							<label class="control-label" for="txtEstado">Estado</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtEstado" ng-model="endereco.estado">
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						
-						<div class="control-group">											
+
+						<div class="control-group">
 							<label class="control-label" for="txtCidade">Cidade</label>
 							<div class="controls">
 								<input type="text" class="span3" id="txtCidade" ng-model="endereco.cidade">
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->																																				
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
 					</form>
-				</div>									
+				</div>
 				<div class="modal-footer">
 					<button class="btn btn-info" data-dismiss="modal" aria-hidden="true" ng-click="manterEndereco()" type="button">Ok</button>
 					<button class="btn" data-dismiss="modal" aria-hidden="true" type="button">Fechar</button>
 				</div>
-			</div>			
-			
+			</div>
+
 			<div id="modalNotaFiscal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
 					<h3 id="myModalLabel">Nota fiscal</h3>
 				</div>
 				<div class="modal-body">
-					<div class="control-group">											
-						<label class="control-label" for="numeroNota">Número</label>
+					<div class="control-group">
+						<label class="control-label" for="numeroNota">NÃºmero</label>
 						<div class="controls">
 							<input type="text" class="span3" id="numeroNota" ng-model="ordemServico.notaFiscal.numero">
-						</div> <!-- /controls -->				
-					</div> <!-- /control-group -->	
-					<div class="control-group">											
+						</div> <!-- /controls -->
+					</div> <!-- /control-group -->
+					<div class="control-group">
 						<label class="control-label" for="dataVencimento">Paga</label>
 						<div class="controls">
 							<input type="checkbox" class="span3" id="paga" ng-model="ordemServico.notaFiscal.paga">
-						</div> <!-- /controls -->				
+						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
-					<div class="control-group">											
+					<div class="control-group">
 						<label class="control-label" for="valorNota">Valor</label>
 						<div class="controls">
 							<input type="text" class="span3" id="valorNota" ng-required="true" ng-model="ordemServico.notaFiscal.valor">
-						</div> <!-- /controls -->				
+						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
-					
-					<div class="control-group">											
+
+					<div class="control-group">
 						<label class="control-label">Vencimentos</label>
 						<div class="controls" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
 							<input type="text" class="span3" ng-model="detalheNota.dataVencimento"><button type="button" class="btn btn-danger" title="Remover vencimento" ng-click="removerDetalheNota(detalheNota)"><i class="icon-trash"></i></button>
-						</div> <!-- /controls -->				
+						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
-					
+
 					<button type="button" class="btn" ng-click="criarDetalheNota(ordemServico.notaFiscal)"><i class="icon-plus"></i> Adicionar vencimento</button>
-				</div>									
+				</div>
 				<div class="modal-footer">
 					<button class="btn btn-info" data-dismiss="modal" aria-hidden="true">Ok</button>
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
-				</div>									
-			</div>						
-			
+				</div>
+			</div>
+
             <div id="divServicos" class="widget-content" ng-show="ordemServico == null && !exibirImportar">
-            
+
 	            <div class="row">
 	            	<div class="span4">
 						<a class="btn" href="gerar_os.jsp"><i class="icon-plus"></i> Criar OS</a>
-						<a class="btn" href="#" ng-click="importar()"><i class="icon-download-alt"></i> Importar informações</a>
+						<a class="btn" href="#" ng-click="importar()"><i class="icon-download-alt"></i> Importar informaÃ§Ãµes</a>
 					</div>
-					
+
 					<div class="span5">
 						<form class="form-horizontal" ng-submit="pesquisarAcao()">
 							<fieldset>
 								<div class="input-append">
-									<input class="span3 m-wrap" ng-model="campoPesquisa" type="text" placeholder="nro os, cliente, descrição...">
+									<input class="span3 m-wrap" ng-model="campoPesquisa" type="text" placeholder="nro os, cliente, descriÃ§Ã£o...">
 									<button class="btn" type="submit">Pesquisar</button>
 								</div>
 							</fieldset>
 						</form>
 					</div>
 				</div>
-            
+
 				<table class="table table-striped table-bordered">
 					<thead>
 					  <tr>
@@ -397,22 +397,22 @@
 					</div>
 				</div>
             </div>
-            <!-- /widget-content --> 
+            <!-- /widget-content -->
           </div>
-          <!-- /widget --> 
+          <!-- /widget -->
         </div>
         <!-- /span6 -->
       </div>
-      <!-- /row --> 
+      <!-- /row -->
     </div>
-    <!-- /container --> 
+    <!-- /container -->
   </div>
-  <!-- /main-inner --> 
+  <!-- /main-inner -->
 </div>
 <!-- /main -->
 <!-- Le javascript
-================================================== --> 
-<!-- Placed at the end of the document so the pages load faster --> 
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
 <script src="js/ServicoCtrl.js?v20150203"></script>
 </body>

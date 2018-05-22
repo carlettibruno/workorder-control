@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" ng-app="app">
 <head>
-<title>Administração - Gerar OS</title>
+<title>AdministraÃ§Ã£o - Gerar OS</title>
 <jsp:include page="head.jsp"></jsp:include>
 </head>
 <body ng-controller="GerarOrdemServicoCtrl" ng-cloak>
@@ -21,7 +21,7 @@
             <form ng-submit="salvar()">
 			<div class="alert alert-success" ng-show="retorno.codigo == 0 && !salvando && !carregandoFotos && !carregandoEndereco">
 			  <button type="button" class="close" data-dismiss="alert">&times;</button>
-			  <strong>Sucesso!</strong> Serviço gerado. <a href="servicos.jsp">Clique aqui</a> para listar os serviços.
+			  <strong>Sucesso!</strong> ServiÃ§o gerado. <a href="servicos.jsp">Clique aqui</a> para listar os serviÃ§os.
 			</div>
 			<div class="alert alert-error" ng-show="retorno.codigo > 0">
 			  <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -30,95 +30,95 @@
 			<div class="container">
 				<div class="row">
 					<div class="span4">
-						<div class="control-group">											
-							<label class="control-label" for="nroservico">Número da ordem de serviço</label>
+						<div class="control-group">
+							<label class="control-label" for="nroservico">NÃºmero da ordem de serviÃ§o</label>
 							<div class="controls">
 								<input type="text" class="span3" id="nroservico" ng-required="true" ng-model="ordemServico.numero">
-								<p class="help-block">Entrar com o número da ordem de serviço gerada.</p>
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->					
-						<div class="control-group">											
+								<p class="help-block">Entrar com o nÃºmero da ordem de serviÃ§o gerada.</p>
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
+						<div class="control-group">
 							<label class="control-label" for="cliente">Cliente</label>
 							<div class="controls">
 								<input type="text" class="span3" readonly="readonly" id="cliente" ng-required="true" ng-model="ordemServico.cliente.nome"> <button href="#modalClientes" data-toggle="modal" class="btn" ng-click="abrirClientes()" type="button" title="Ver clientes"><i class="icon-list"></i></button>
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->					
-						
-						<div class="control-group">											
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
+
+						<div class="control-group">
 							<label class="control-label" for="email">Email</label>
 							<div class="controls">
 								<input type="text" class="span3" id="email" ng-model="ordemServico.email">
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->	
-						<div class="control-group">											
-							<label class="control-label" for="descricao">Descrição do serviço</label>
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
+						<div class="control-group">
+							<label class="control-label" for="descricao">DescriÃ§Ã£o do serviÃ§o</label>
 							<div class="controls">
 								<input type="text" class="span3" id="descricao" ng-required="true" ng-model="ordemServico.descricao">
-								<p class="help-block">Breve descrição do serviço que será visualizada pelo cliente.</p>
-							</div> <!-- /controls -->				
+								<p class="help-block">Breve descriÃ§Ã£o do serviÃ§o que serÃ¡ visualizada pelo cliente.</p>
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
-						<div class="control-group">											
-							<label class="control-label" for="descricao">Previsão de entrega</label>
+						<div class="control-group">
+							<label class="control-label" for="descricao">PrevisÃ£o de entrega</label>
 							<div class="controls">
 								<input type="date" ng-model="ordemServico.previsaoEntrega" placeholder="dd/MM/yyyy" min="2013-01-01" max="2020-12-31" />
 								<p class="help-block">Data prevista de entrega para o cliente.</p>
-							</div> <!-- /controls -->				
+							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
 					</div>
 
 					<div class="span4">
 						<div class="control-group">
-							<button type="button" class="btn btn-invert" ng-show="usarPlanilhaEndereco" ng-click="setUsarPlanilhaEndereco(false)"><i class="icon-home"></i> Usar endereço cliente</button>
-							<button type="button" class="btn btn-invert" ng-show="!usarPlanilhaEndereco" ng-click="setUsarPlanilhaEndereco(true)"><i class="icon-table"></i> Usar lista de endereços</button>
+							<button type="button" class="btn btn-invert" ng-show="usarPlanilhaEndereco" ng-click="setUsarPlanilhaEndereco(false)"><i class="icon-home"></i> Usar endereÃ§o cliente</button>
+							<button type="button" class="btn btn-invert" ng-show="!usarPlanilhaEndereco" ng-click="setUsarPlanilhaEndereco(true)"><i class="icon-table"></i> Usar lista de endereÃ§os</button>
 						</div>
-						<div class="control-group" ng-show="usarPlanilhaEndereco">											
-							<label class="control-label" for="username">Lista de endereços</label>
+						<div class="control-group" ng-show="usarPlanilhaEndereco">
+							<label class="control-label" for="username">Lista de endereÃ§os</label>
 							<div class="controls">
 								<input type="file" class="span3" ng-file-select="onPlanilhaSelect($files)">
-								<p class="help-block">Inserir lista dos endereços de destino do serviço.</p>
-							</div> <!-- /controls -->				
-						</div> <!-- /control-group -->						
+								<p class="help-block">Inserir lista dos endereÃ§os de destino do serviÃ§o.</p>
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->
 						<div class="control-group" ng-show="!usarPlanilhaEndereco">
 							<div class="control-group">
 								<div class="controls">
-									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.titulo" placeholder="Título">
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->													
+									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.titulo" placeholder="TÃ­tulo">
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
 							<div class="control-group">
 								<div class="controls">
-									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.endereco" placeholder="Endereço">
-								</div> <!-- /controls -->				
+									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.endereco" placeholder="EndereÃ§o">
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group">
 								<div class="controls">
 									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.cep" placeholder="CEP">
-								</div> <!-- /controls -->				
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group">
 							<div class="controls">
 									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.complemento" placeholder="Complemento">
-								</div> <!-- /controls -->				
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group">
 								<div class="controls">
 									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.bairro" placeholder="Bairro">
-								</div> <!-- /controls -->				
+								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group">
 								<div class="controls">
 									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.estado" placeholder="Estado">
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->							
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
 							<div class="control-group">
 								<div class="controls">
 									<input type="text" class="span3" ng-model="ordemServico.cliente.endereco.cidade" placeholder="Cidade">
-								</div> <!-- /controls -->				
-							</div> <!-- /control-group -->	
-						</div>					
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->
+						</div>
 					</div>
 
 					<div class="span4">
-						<div class="control-group">											
+						<div class="control-group">
 							<label class="control-label" for="username">Fotos</label>
 							<div class="controls">
 								<input type="file" class="span3" ng-file-select="onFileSelect($files)" multiple>
@@ -131,8 +131,8 @@
 								</tr>
 								</tbody>
 							</table>
-						</div> <!-- /control-group -->					
-					</div>				
+						</div> <!-- /control-group -->
+					</div>
 				</div>
 			</div>
 			<div class="form-actions">
@@ -141,18 +141,18 @@
 				<a class="btn" href="servicos.jsp"  ng-disabled="salvando || carregandoFotos || carregandoEndereco">Cancelar</a>
 				<span ng-show="salvando || carregandoFotos || carregandoEndereco">Aguarde... </span>
 				<span ng-show="salvando">Salvando OS.</span>
-				<span ng-show="!salvando && carregandoEndereco">Carregando endereços.</span>
+				<span ng-show="!salvando && carregandoEndereco">Carregando endereÃ§os.</span>
 				<span ng-show="!salvando && !carregandoEndereco && carregandoFotos">Carregando fotos.</span>
 			</div>
 			</form>
             </div>
-            
+
 			<div id="modalClientes" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
 					<h3 id="myModalLabel">Clientes</h3>
 				</div>
-				
+
 				<div class="modal-body">
                 	<form ng-submit="pesquisarClientes()" class="form-horizontal">
 						<div class="control-group">
@@ -162,9 +162,9 @@
 			                     	<button class="btn" type="submit">Pesquisar</button>
 			                    </div>
 			                </div>
-		                </div>               		
+		                </div>
                     </form>
-					
+
 					<table class="table table-striped table-bordered">
 		                <thead>
 		                  <tr>
@@ -186,31 +186,31 @@
 						<div class="span5">
 							<button class=" span5 btn" ng-click="atualizarClientes(campoPesquisaCliente);" ng-show="carregarMaisCliente"><img src="img/ajax-loader.gif" ng-show="carregandoCliente"> Carregar mais</button>
 						</div>
-					</div>		        	
-				</div>									
+					</div>
+				</div>
 				<div class="modal-footer">
 					<div style="float: left;">Cliente selecionado: <b>{{ordemServico.cliente.nome}}</b></div>
 					<button class="btn btn-info" data-dismiss="modal" aria-hidden="true">Fechar</button>
-				</div>					
-			</div>            
-            
-            <!-- /widget-content --> 
+				</div>
+			</div>
+
+            <!-- /widget-content -->
           </div>
-          <!-- /widget --> 
+          <!-- /widget -->
         </div>
         <!-- /span6 -->
       </div>
-      <!-- /row --> 
+      <!-- /row -->
     </div>
-    <!-- /container --> 
+    <!-- /container -->
   </div>
-  <!-- /main-inner --> 
+  <!-- /main-inner -->
 </div>
 <!-- /main -->
 <!-- Le javascript
-================================================== --> 
-<!-- Placed at the end of the document so the pages load faster --> 
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/GerarOrdemServicoCtrl.js?v20150203"></script> 
+<script src="js/GerarOrdemServicoCtrl.js?v20150203"></script>
 </body>
 </html>
