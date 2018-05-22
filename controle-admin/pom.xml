@@ -66,13 +66,13 @@
 						<configuration>
 							<hostname>carlettisolucoes.com.br</hostname>
 							<port>9990</port>
-							<username>deployer</username>
-							<password>csideploy</password>
+							<username>${username}</username>
+							<password>${password}</password>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
-		</profile>		
+		</profile>
 	</profiles>
 
 	<dependencies>
