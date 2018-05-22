@@ -54,13 +54,13 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 	@EJB
 	private ConfiguracaoService configuracaoService;
-	
+
 	@EJB
-	private EtapaService etapaService;	
-	
+	private EtapaService etapaService;
+
 	@EJB
 	private FilaImpressoraService filaImpressoraService;
-		
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public RetornoServico<List<OrdemServico>> obterOrdensServico(Integer inicio, Integer qtdeRegistro, String token, String filtro) {
@@ -111,7 +111,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			query.setParameter("codigo", token);
 			Sessao sessao = (Sessao) query.getSingleResult();
 			ordemServico.setFuncionarioCriacao((Funcionario) sessao.getUsuario());
-			
+
 			em.persist(ordemServico);
 			RetornoServico<Etapa> etapa = etapaService.obterEtapaInicial();
 			if(etapa.getData() != null) {
@@ -123,9 +123,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				em.persist(historico);
 				ordemServico.setHistoricoAtual(historico);
 			}
-			
+
 			filaImpressoraService.create(ordemServico.getId(), 2);
-			
+
 			return new RetornoServico<Long>(Codigo.SUCESSO, ordemServico.getIdOrdemServico());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,7 +151,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServicoBase.setDataModificacao(new Date());
 			ordemServicoBase.setDescricao(ordemServico.getDescricao());
 			ordemServicoBase.setPrevisaoEntrega(ordemServico.getPrevisaoEntrega());
-							
+
 			atualizarNotaFiscal(idOrdemServico, ordemServico.getNotaFiscal());
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {
@@ -198,10 +198,10 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			if(sessao.getUsuario() instanceof ClienteAcesso) {
 				mostrarAprovada = " AND f.aprovada = :aprovada ";
 			}
-			
+
 			Query queryFoto = em.createQuery("SELECT f FROM Foto f WHERE f.ordemServico.idOrdemServico = :idOrdemServico "+mostrarAprovada+" ORDER BY f.idFoto");
 			queryFoto.setParameter("idOrdemServico", idOrdemServico);
-			if(!mostrarAprovada.isEmpty()) {				
+			if(!mostrarAprovada.isEmpty()) {
 				queryFoto.setParameter("aprovada", true);
 			}
 			List<Foto> fotos = queryFoto.getResultList();
@@ -223,10 +223,10 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				throw new Exception(retornoOs.getMensagem());
 			}
 			OrdemServico ordemServico = retornoOs.getData();
-			boolean fotoAprovada = ordemServico.getCliente().getAprovacaoFoto() != null && !ordemServico.getCliente().getAprovacaoFoto();  
-			
+			boolean fotoAprovada = ordemServico.getCliente().getAprovacaoFoto() != null && !ordemServico.getCliente().getAprovacaoFoto();
+
 			Configuracao configRaiz = configuracaoService.obterConfiguracao(ChaveConfiguracao.RAIZ_FOTOS.ordinal()).getData();
-			
+
 			List<InputPart> parts = data.getParts();
 			Foto foto = null;
 			for (InputPart part : parts) {
@@ -237,12 +237,12 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				foto.setDataModificacao(new Date());
 				foto.setOrdemServico(ordemServico);
 				foto.setNome(nome);
-				foto.setAprovada(fotoAprovada); 
+				foto.setAprovada(fotoAprovada);
 				InputStream inputStream = part.getBody(InputStream.class,null);
 				byte[] arquivo = IOUtils.toByteArray(inputStream);
-				
+
 				String path = FileUtil.obterPathFoto(configRaiz.getValor(), nome);
-				
+
 				foto.setCaminho(path);
 				String caminhoCompleto = configRaiz.getValor() + path;
 				File fileCompleto = new File(caminhoCompleto);
@@ -253,12 +253,12 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				foto.setTamanho(Integer.parseInt(fileCompleto.length()+""));
 				FileUtil.redimensionarImagem(caminhoCompleto, FileUtil.obterCaminhoThumb(caminhoCompleto,FileUtil.TAMANHO_PEQUENO), FileUtil.TAMANHO_PEQUENO);
 				FileUtil.redimensionarImagem(caminhoCompleto, FileUtil.obterCaminhoThumb(caminhoCompleto,FileUtil.TAMANHO_NORMAL), FileUtil.TAMANHO_NORMAL);
-				
+
 				em.persist(foto);
 				if(ordemServico.getFoto() == null) {
 					ordemServico.setFoto(foto);
 				}
-				
+
 //				RetornoServico<Configuracao> configuracao = configuracaoService.obterConfiguracao(ChaveConfiguracao.PERCENTO_PROTOCOLO.ordinal());
 //				Integer percento = Integer.parseInt(configuracao.getData().getValor());
 //				CheckProtocolo checkProtocolo = new CheckProtocolo();
@@ -266,9 +266,13 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 //				Double percentualImagem = checkProtocolo.percentualProtocolo(new File(caminhoCompleto));
 //				if(percentualImagem > percento) {
 					encerrarPorEntrega(idOrdemServico, TipoEntrega.PARTICULAR.toString());
-//				}				
+//				}
 			}
-			return new RetornoServico<Long>(Codigo.SUCESSO, foto.getId());
+			if(foto != null) {
+				return new RetornoServico<Long>(Codigo.SUCESSO, foto.getId());
+			} else {
+				return new RetornoServico<Long>(Codigo.SUCESSO);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new RetornoServico<Long>(Codigo.ERRO, e.getMessage());
@@ -292,7 +296,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);			
+			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);
 		}
 	}
 
@@ -326,7 +330,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				ordemServico.getHistoricoAtual().setDataFim(new Date());
 				ordemServico.getHistoricoAtual().setStatus(Status.CONCLUIDO);
 			}
-			if(idEtapa != null) {				
+			if(idEtapa != null) {
 				ordemServico.getHistoricoAtual().setProximo(historico);
 				Etapa etapa = em.find(Etapa.class, idEtapa);
 				historico.setDataInicio(new Date());
@@ -354,7 +358,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<List<EnderecoEntrega>>(Codigo.SUCESSO, enderecosEntrega);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<List<EnderecoEntrega>>(Codigo.ERRO, e.getMessage());			
+			return new RetornoServico<List<EnderecoEntrega>>(Codigo.ERRO, e.getMessage());
 		}
 	}
 
@@ -369,7 +373,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);			
+			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);
 		}
 	}
 
@@ -381,7 +385,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);			
+			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);
 		}
 	}
 
@@ -393,7 +397,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			foto = new Foto();
 			foto.setCaminhoCompletoThumb(caminhoCompleto);
 			return foto;
-		} else {			
+		} else {
 			String caminhoCompleto = caminhoBase + "foto/" + foto.getCaminho();
 			foto.setCaminhoCompleto(FileUtil.obterCaminhoThumbWeb(caminhoCompleto,FileUtil.TAMANHO_NORMAL));
 			foto.setCaminhoCompletoThumb(FileUtil.obterCaminhoThumbWeb(caminhoCompleto,FileUtil.TAMANHO_PEQUENO));
@@ -410,8 +414,8 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<OrdemServico>(Codigo.SUCESSO, os);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<OrdemServico>(Codigo.ERRO, e.getMessage(), null);			
-		}		
+			return new RetornoServico<OrdemServico>(Codigo.ERRO, e.getMessage(), null);
+		}
 	}
 
 	@Override
@@ -428,16 +432,16 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	    			enderecoEntrega.setOrdemServico(ordemServico);
 	    			enderecoEntrega.setStatus(Status.PENDENTE);
 	    			em.persist(enderecoEntrega);
-				}			
+				}
 			}
 
 			return new RetornoServico<String>(Codigo.SUCESSO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);			
+			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);
 		}
 	}
-	
+
 	private void atualizarRetornoOrdemServico(OrdemServico ordemServico) {
 		String diffData = "";
 		if(ordemServico.getStatus().equals(Status.CONCLUIDO) && ordemServico.getHistoricoAtual() != null) {
@@ -449,14 +453,14 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServico.setNomeEtapaAtual(ordemServico.getHistoricoAtual().getEtapa().getNome());
 		}
 		ordemServico.setDiferencaDatas(diffData);
-		
+
 		if(ordemServico.getFoto() == null) {
-			Foto foto = atualizarCaminhoCompleto(ordemServico.getFoto());					
+			Foto foto = atualizarCaminhoCompleto(ordemServico.getFoto());
 			ordemServico.setFoto(foto);
 		} else {
 			atualizarCaminhoCompleto(ordemServico.getFoto());
 		}
-		
+
 		if(ordemServico.getNotaFiscal() != null) {
 			ordemServico.getNotaFiscal().setDetalhesNota(null);
 		}
@@ -480,13 +484,13 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServicoBase.getNotaFiscal().setNumero(notaFiscal.getNumero());
 			ordemServicoBase.getNotaFiscal().setValor(notaFiscal.getValor());
 			ordemServicoBase.getNotaFiscal().setPaga(notaFiscal.getPaga());
-			
+
 			List<DetalheNota> detalhesNotaBase = ordemServicoBase.getNotaFiscal().getDetalhesNota();
 			if(detalhesNotaBase == null) {
 				detalhesNotaBase = new ArrayList<DetalheNota>();
 			}
-			
-			for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {					
+
+			for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
 				boolean existe = false;
 				for (DetalheNota detalheNotaBase : detalhesNotaBase) {
 					if(detalheNotaBase.getDataVencimento().compareTo(detalheNota.getDataVencimento()) == 0) {
@@ -507,7 +511,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 	@Override
 	public RetornoServico<String> aprovarFoto(Long idOrdemServico, Long idFoto, Boolean aprova) {
-		try {			
+		try {
 			Foto foto = em.find(Foto.class, idFoto);
 			foto.setAprovada(aprova);
 			em.merge(foto);
@@ -520,7 +524,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public RetornoServico<List<DetalheNota>> obterDetalhesNota(Long idNotaFiscal) {
-		try {			
+		try {
 			Query query = em.createQuery("SELECT dn FROM DetalheNota dn WHERE dn.notaFiscal.idNotaFiscal = :idNotaFiscal");
 			query.setParameter("idNotaFiscal", idNotaFiscal);
 			List<DetalheNota> detalhesNota = query.getResultList();
@@ -547,7 +551,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public RetornoServico<List<Evento>> obterEventosEntrega(String codigo) {
-		try {			
+		try {
 			RastreioManager rm = new RastreioManager();
 			List<Evento> eventos = rm.obterEventos(codigo);
 			for (Evento evento : eventos) {
@@ -565,10 +569,10 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			return new RetornoServico<List<Evento>>(Codigo.ERRO, e.getMessage());
 		}
 	}
-	
+
 	public void encerrarPorEntrega(Long idOrdemServico, String codigoReferencia) {
 		OrdemServico ordemServico = em.find(OrdemServico.class, idOrdemServico);
-		
+
 		if(ordemServico.getStatus().equals(Status.CONCLUIDO)) {
 			return;
 		}
@@ -590,7 +594,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				enderecoEntrega.setStatus(Status.CONCLUIDO);
 			}
 		}
-		
+
 		if(concluida) {
 			alterarStatus(ordemServico.getId(), null);
 			ordemServico.setStatus(Status.CONCLUIDO);
