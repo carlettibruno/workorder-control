@@ -168,6 +168,9 @@
 															</tr>
 														</table>
 													</div>
+                          <div>
+                            <a href="#modalReferenciaEntrega" data-toggle="modal" ng-click="selecionarEnderecoEntrega(endereco)">Adicionar referência de entrega</a>
+                          </div>
 												</div>
 											</div>
 										</div>
@@ -216,6 +219,25 @@
 
 				</div>
 			</div>
+
+      <div id="modalReferenciaEntrega" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+					<h3 id="myModalLabel">Referência entrega</h3>
+        </div>
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label" for="txtCodigoReferencia">Código de referência</label>
+            <div class="controls">
+              <input type="text" class="span3" id="txtCodigoReferencia" ng-model="codigoReferencia">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" data-dismiss="modal" aria-hidden="true" ng-click="adicionarReferenciaEntrega()" type="button">Adicionar</button>
+					<button class="btn" data-dismiss="modal" aria-hidden="true" type="button">Cancelar</button>
+        </div>
+      </div>
 
 			<div id="modalImagem" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
@@ -414,6 +436,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ServicoCtrl.js?v20150203"></script>
+<script src="js/ServicoCtrl.js?v20180522"></script>
 </body>
 </html>
