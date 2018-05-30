@@ -31,16 +31,16 @@ public class Main implements Runnable {
 							int qtde = fi.getNumberOfCopies();
 							for (int i = 0; i < qtde; i++) {
 								impressora.imprimirTexto("Ordem de serviço impressa: "+fi.getNumberOs(), false, true, false, false, TipoLetra.NORMAL);
-								impressora.imprimirCodigoBarras(fi.getNumberOs().toString(), 240, 2, 10, FonteCodigoBarras.NORMAL, true, false);
+								impressora.imprimirCodigoBarras(fi.getNumberOs(), 240, 2, 10, FonteCodigoBarras.NORMAL, true, false);
 								if(i != qtde - 1) {
 									impressora.cortarPapel(CortePapel.CORTE_PARCIAL);
 								}
 							}
-							System.out.println("Impressão realizada: "+fi.getNumberOs());
+							impressora.cortarPapel(CortePapel.CORTE_TOTAL);
+							System.out.println("Impressao realizada: "+fi.getNumberOs());
 							sr.removeFilaImpressora(fi);
-							System.out.println("Impressão notificada: "+fi.getNumberOs());
+							System.out.println("Impressao notificada: "+fi.getNumberOs());
 						}
-						impressora.cortarPapel(CortePapel.CORTE_TOTAL);
 						Thread.sleep(Long.parseLong(Util.getValor("impressora.tempo.espera")));
 					} catch (Exception e) {
 						e.printStackTrace();

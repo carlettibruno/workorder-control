@@ -34,7 +34,7 @@ public class FilaImpressoraServiceImpl implements FilaImpressoraService {
 	}
 
 	@Override
-	public RetornoServico<FilaImpressora> create(Long osNumber, Integer numberOfCopies) {
+	public RetornoServico<FilaImpressora> create(String osNumber, Integer numberOfCopies) {
 		FilaImpressora fi = new FilaImpressora();
 		fi.setNumberOfCopies(numberOfCopies);
 		fi.setNumberOs(osNumber);

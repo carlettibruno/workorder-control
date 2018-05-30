@@ -124,7 +124,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				ordemServico.setHistoricoAtual(historico);
 			}
 
-			filaImpressoraService.create(ordemServico.getId(), 2);
+			filaImpressoraService.create(ordemServico.getNumero(), 2);
 
 			return new RetornoServico<Long>(Codigo.SUCESSO, ordemServico.getIdOrdemServico());
 		} catch (Exception e) {

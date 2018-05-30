@@ -28,6 +28,6 @@ public interface FilaImpressoraService {
 	
 	@POST
 	@Path("/")
-	RetornoServico<FilaImpressora> create(Long osNumber, Integer numberOfCopies);
+	RetornoServico<FilaImpressora> create(String osNumber, Integer numberOfCopies);
 	
 }

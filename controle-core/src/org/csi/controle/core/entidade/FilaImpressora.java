@@ -21,7 +21,7 @@ public class FilaImpressora implements Serializable {
 	private Long idFilaImpressora;
 	
 	@Column(name="NUMBER_OS", nullable=false)
-	private Long numberOs;
+	private String numberOs;
 	
 	@Column(name="NUMBER_OF_COPIES", nullable=false)
 	private Integer numberOfCopies;
@@ -34,11 +34,11 @@ public class FilaImpressora implements Serializable {
 		this.idFilaImpressora = idFilaImpressora;
 	}
 
-	public Long getNumberOs() {
+	public String getNumberOs() {
 		return numberOs;
 	}
 
-	public void setNumberOs(Long numberOs) {
+	public void setNumberOs(String numberOs) {
 		this.numberOs = numberOs;
 	}
 
