@@ -1,7 +1,7 @@
-var app = angular.module('app', ['angularFileUpload', 'ngInputDate']);
+var app = angular.module('app', ['angularFileUpload', 'datePicker']);
 
 function GerarOrdemServicoCtrl($scope, $http, $upload) {
-	
+
 	$scope.ordemServico = {cliente:{}};
 	$scope.clientes = new Array();
 	$scope.retorno = null;
@@ -14,27 +14,27 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 	$scope.usarPlanilhaEndereco = false;
 	$scope.fotosAdicionada = new Array();
 	$scope.planilha = null;
-	
+
 	$scope.onFileSelect = function($files) {
 		angular.forEach($files, function(value, key){
 			$scope.fotosAdicionada.push(value);
 		});
 	};
-	
+
 	$scope.onPlanilhaSelect = function($files) {
 		$scope.planilha = $files;
-	};	
-	
+	};
+
 	$scope.apagarFoto = function(foto) {
 		$scope.fotosAdicionada.splice($scope.fotosAdicionada.indexOf(foto), 1);
 	};
-	
+
 	$scope.resetCarregando = function() {
 		$scope.salvando = false;
 		$scope.carregandoFotos = false;
-		$scope.carregandoEndereco = false;		
+		$scope.carregandoEndereco = false;
 	}
-	
+
 	$scope.salvar = function() {
 		delete $scope.ordemServico.cliente.marcado;
 		$scope.salvando = true;
@@ -49,7 +49,7 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 			}
 			var idOs = data.data;
 			if($scope.usarPlanilhaEndereco) {
-				$upload.upload({ 
+				$upload.upload({
 					url : 'services/ordemservico/'+idOs+'/enderecos',
 					method: "POST",
 					headers: {'token': $.cookie('token')},
@@ -61,19 +61,19 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 					$scope.carregandoEndereco = false;
 				}).xhr(function(xhr){
 					$scope.carregandoEndereco = false;
-				});					
+				});
 			} else {
 				var httpEndereco = $http({url: 'services/ordemservico/'+idOs+'/endereco', data: $scope.ordemServico.cliente.endereco, method: "POST", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
 				httpEndereco.success(function (data, status, headers, config) {
-					$scope.carregandoEndereco = false;				
+					$scope.carregandoEndereco = false;
 				}).
 				error(function (data, status, headers, config){
 					$scope.carregandoEndereco = false;
 					alert(data);
-				});				
+				});
 			}
-			
-			$upload.upload({ 
+
+			$upload.upload({
 				url : 'services/ordemservico/'+idOs+'/foto',
 				method: "POST",
 				headers: {'token': $.cookie('token')},
@@ -85,17 +85,17 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 				$scope.carregandoFotos = false;
 			}).xhr(function(xhr){
 				$scope.carregandoFotos = false;
-			});			
-			
+			});
+
         	$scope.salvando = false;
-			$scope.retorno = {codigo:0,mensagem:'Ordem de serviço gerada com sucesso!'};			
+			$scope.retorno = {codigo:0,mensagem:'Ordem de serviço gerada com sucesso!'};
         }).
         error(function (data, status, headers, config){
         	$scope.resetCarregando();
 			$scope.retorno = {codigo:1,mensagem:data};
-		});		
+		});
 	};
-	
+
 	$scope.atualizarClientes = function(nome) {
 		$scope.carregarMaisCliente = true;
 		$scope.carregandoCliente = true;
@@ -113,17 +113,17 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 			$scope.retorno = {codigo:1,mensagem:data};
 		});
 	};
-	
+
 	$scope.pesquisarClientes = function() {
 		$scope.clientes = new Array();
 		$scope.atualizarClientes($scope.campoPesquisaCliente);
 	};
-	
+
 	$scope.abrirClientes = function() {
 		$scope.campoPesquisaCliente = "";
 		$scope.pesquisarClientes();
 	};
-	
+
 	$scope.selecionarCliente = function(cliente) {
 		angular.forEach($scope.clientes, function(value, key){
 			value.marcado = false;

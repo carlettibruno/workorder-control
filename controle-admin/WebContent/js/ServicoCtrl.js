@@ -1,4 +1,4 @@
-var app = angular.module('app', ['angularFileUpload', 'ngInputDate']);
+var app = angular.module('app', ['angularFileUpload', 'datePicker']);
 
 function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 

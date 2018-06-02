@@ -74,7 +74,7 @@
 							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="previsao">Previsão de entrega</label>
 								<div class="controls">
-									<input type="date" ng-model="ordemServico.previsaoEntrega" id="previsao" placeholder="dd/MM/yyyy" min="2013-01-01" max="2020-12-31" />
+                  <input date-time ng-model="ordemServico.previsaoEntrega" id="previsao" view="date" min-view="date" format="DD/MM/YYYY">
 								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group" ng-show="!visualizar">
@@ -353,7 +353,7 @@
 					<div class="control-group">
 						<label class="control-label">Vencimentos</label>
 						<div class="controls" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
-							<input type="text" class="span3" ng-model="detalheNota.dataVencimento"><button type="button" class="btn btn-danger" title="Remover vencimento" ng-click="removerDetalheNota(detalheNota)"><i class="icon-trash"></i></button>
+							<input date-time ng-model="detalheNota.dataVencimento" class="span3" view="date" min-view="date" format="DD/MM/YYYY"><button type="button" class="btn btn-danger" title="Remover vencimento" ng-click="removerDetalheNota(detalheNota)"><i class="icon-trash"></i></button>
 						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
 

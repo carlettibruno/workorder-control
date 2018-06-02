@@ -60,7 +60,7 @@
 						<div class="control-group">
 							<label class="control-label" for="descricao">Previsão de entrega</label>
 							<div class="controls">
-								<input type="date" ng-model="ordemServico.previsaoEntrega" placeholder="dd/MM/yyyy" min="2013-01-01" max="2020-12-31" />
+                <input date-time ng-model="ordemServico.previsaoEntrega" id="previsao" view="date" min-view="date" format="DD/MM/YYYY">
 								<p class="help-block">Data prevista de entrega para o cliente.</p>
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
