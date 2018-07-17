@@ -49,17 +49,22 @@ public class ConfiguracaoServiceImpl implements ConfiguracaoService {
 	}
 
 	@Override
-	public RetornoServico<Configuracao> obterConfiguracao(Integer chave) {
+	public RetornoServico<Configuracao> obterConfiguracao(String chave) {
 		try {			
 			Query query = em.createQuery("SELECT c FROM Configuracao c WHERE c.ativo = :ativo AND c.chave = :chave");
 			query.setParameter("ativo", true);
-			query.setParameter("chave", ChaveConfiguracao.values()[chave]);
+			query.setParameter("chave", ChaveConfiguracao.valueOf(chave));
 			Configuracao configuracao = (Configuracao) query.getSingleResult();
 			return new RetornoServico<Configuracao>(Codigo.SUCESSO, configuracao);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new RetornoServico<Configuracao>(Codigo.ERRO, e.getMessage());
 		}
+	}
+	
+	@Override
+	public RetornoServico<Configuracao> obterConfiguracao(Integer chave) {
+		return obterConfiguracao(ChaveConfiguracao.values()[chave].name());
 	}
 
 	@Override

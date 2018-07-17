@@ -44,6 +44,11 @@ public interface ConfiguracaoService {
 	@DELETE
 	@Path("/{id}")
 	@Produces("application/json")
-	RetornoServico<String> apagarConfiguracao(@PathParam("id") Integer idConfiguracao);	
+	RetornoServico<String> apagarConfiguracao(@PathParam("id") Integer idConfiguracao);
+
+	@GET
+	@Path("/byname/{chave}")
+	@Produces("application/json")
+	RetornoServico<Configuracao> obterConfiguracao(String chave);	
 	
 }

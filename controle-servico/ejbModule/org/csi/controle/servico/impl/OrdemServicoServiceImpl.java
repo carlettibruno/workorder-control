@@ -42,6 +42,8 @@ import org.csi.controle.servico.OrdemServicoService;
 import org.csi.controle.servico.util.ConversorTxt;
 import org.csi.controle.servico.util.FileUtil;
 import org.csi.rastreamento.correios.entidade.Evento;
+import org.csi.rastreamento.correios.manager.Rastreio;
+import org.csi.rastreamento.correios.manager.RastreioFactory;
 import org.csi.rastreamento.correios.manager.RastreioManager;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -552,8 +554,11 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@Override
 	public RetornoServico<List<Evento>> obterEventosEntrega(String codigo) {
 		try {
-			RastreioManager rm = new RastreioManager();
-			List<Evento> eventos = rm.obterEventos(codigo);
+			Rastreio rastreio = RastreioFactory.getInstance(codigo);
+			Configuracao configWsdl = configuracaoService.obterConfiguracao(rastreio.getTokenWsdl()).getData();
+			Configuracao configUser = configuracaoService.obterConfiguracao(rastreio.getTokenUsuario()).getData();
+			Configuracao configPassword = configuracaoService.obterConfiguracao(rastreio.getTokenSenha()).getData();
+			List<Evento> eventos = rastreio.obterEventos(codigo, configUser.getValor(), configPassword.getValor(), configWsdl.getValor());
 			for (Evento evento : eventos) {
 				if(evento.getDescricao().toUpperCase().contains("ENTREGUE")) {
 					Query query = em.createQuery("SELECT os FROM ReferenciaEntrega re JOIN re.enderecoEntrega ee JOIN ee.ordemServico os WHERE re.codigoReferencia = :codigoReferencia");
@@ -602,10 +607,13 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Schedule(hour="0", minute="0", second="0")
+	@Schedule(minute="0", second="0")
 	public void sincronizarReferenciaEntrega() {
-		Query query = em.createQuery("SELECT re FROM ReferenciaEntrega re WHERE re.tipoEntrega = :tipoEntrega AND re.status <> :status");
-		query.setParameter("tipoEntrega", TipoEntrega.CORREIOS);
+		Query query = em.createQuery("SELECT re FROM ReferenciaEntrega re WHERE re.tipoEntrega IN(:tipoEntrega) AND re.status <> :status");
+		List<TipoEntrega> tiposEntrega = new ArrayList<>();
+		tiposEntrega.add(TipoEntrega.CORREIOS);
+		tiposEntrega.add(TipoEntrega.JADLOG);
+		query.setParameter("tipoEntrega", tiposEntrega);
 		query.setParameter("status", Status.CONCLUIDO);
 		List<ReferenciaEntrega> referencias = query.getResultList();
 		for (ReferenciaEntrega referenciaEntrega : referencias) {
