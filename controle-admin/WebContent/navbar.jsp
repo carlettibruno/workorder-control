@@ -8,7 +8,7 @@
           <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> {{nomeUsuario}} <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="alterar_senha.jsp"><i class="icon-key"></i> Alterar senha</a></li>
-              <li ng-show="permissaoConfiguracao.exibir"><a href="configuracao.jsp"><i class="icon-cogs"></i> ConfiguraÃ§Ãµes</a></li>
+              <li ng-show="permissaoConfiguracao.exibir"><a href="configuracao.jsp"><i class="icon-cogs"></i> Configurações</a></li>
               <li><a href="#" ng-click="sair()"><i class="icon-signout"></i> Sair</a></li>
             </ul>
           </li>
