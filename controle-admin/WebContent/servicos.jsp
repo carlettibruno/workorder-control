@@ -161,7 +161,7 @@
 													<div ng-show="endereco.referenciasEntrega.length == 0">Não disponível.</div>
 													<div ng-repeat="re in endereco.referenciasEntrega">
 														{{re.tipoEntrega}} ({{re.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}) <span ng-show="re.codigoReferencia != ''"><b>{{re.codigoReferencia}}</b></span>
-														<table ng-show="re.tipoEntrega == 'CORREIOS'">
+														<table ng-show="re.tipoEntrega != 'PARTICULAR'">
 															<tr ng-repeat="e in re.eventos">
 																<td>{{e.titulo}}</td>
 																<td><b>{{e.descricao}}</b></td>

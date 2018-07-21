@@ -146,7 +146,7 @@
 									<div class="row" ng-show="re.codigoReferencia != ''">
 										<div class="col-lg-3">Referência</div>
 										<div class="col-lg-7"><b>{{re.codigoReferencia}}</b></div>
-										<div class="col-lg-10" ng-show="re.tipoEntrega == 'CORREIOS'">
+										<div class="col-lg-10" ng-show="re.tipoEntrega != 'PARTICULAR'">
 											<div ng-repeat="e in re.eventos" style="padding: 2%;">
 												<div><i>{{e.titulo}}</i></div>
 												<div><b>{{e.descricao}}</b></div>
