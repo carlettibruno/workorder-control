@@ -273,7 +273,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 			$scope.enderecos = data.data;
 	      angular.forEach($scope.enderecos, function(endereco, endkey){
 	      	angular.forEach(endereco.referenciasEntrega, function(ref, refkey){
-	        	if(ref.tipoEntrega == 'CORREIOS') {
+	        	if(ref.tipoEntrega != 'PARTICULAR') {
 	        		var httpCorreios = $http({url: 'services/ordemservico/endereco/'+ref.codigoReferencia, method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
 	        		httpCorreios.success(function (data, status, headers, config) {
 	        			ref.eventos = data.data;

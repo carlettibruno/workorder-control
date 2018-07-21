@@ -44,7 +44,6 @@ import org.csi.controle.servico.util.FileUtil;
 import org.csi.rastreamento.correios.entidade.Evento;
 import org.csi.rastreamento.correios.manager.Rastreio;
 import org.csi.rastreamento.correios.manager.RastreioFactory;
-import org.csi.rastreamento.correios.manager.RastreioManager;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -555,6 +554,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public RetornoServico<List<Evento>> obterEventosEntrega(String codigo) {
 		try {
 			Rastreio rastreio = RastreioFactory.getInstance(codigo);
+			if(rastreio == null) {
+				return new RetornoServico<>();
+			}
 			Configuracao configWsdl = configuracaoService.obterConfiguracao(rastreio.getTokenWsdl()).getData();
 			Configuracao configUser = configuracaoService.obterConfiguracao(rastreio.getTokenUsuario()).getData();
 			Configuracao configPassword = configuracaoService.obterConfiguracao(rastreio.getTokenSenha()).getData();

@@ -1,21 +1,24 @@
 package org.csi.controle.core.entidade;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.csi.rastreamento.correios.manager.CorreiosRastreio;
+import org.csi.rastreamento.correios.manager.JadlogRastreio;
+import org.csi.rastreamento.correios.manager.Rastreio;
+import org.csi.rastreamento.correios.manager.RastreioFactory;
 
 public enum TipoEntrega {
 	
 	PARTICULAR, CORREIOS, JADLOG;
 	
 	public static TipoEntrega obterTipoEntrega(String codigoReferencia) {
-		Pattern pattern = Pattern.compile("[A-Za-z]{2}[0-9]{9}[A-Za-z]{2}");
-		Matcher matcher = pattern.matcher(codigoReferencia);
-
-		TipoEntrega tipoEntrega = TipoEntrega.PARTICULAR;
-		while (matcher.find()) {
-			tipoEntrega = TipoEntrega.CORREIOS;
+		Rastreio r = RastreioFactory.getInstance(codigoReferencia);
+		if(r == null) {
+			return TipoEntrega.PARTICULAR;
+		} else if(r instanceof CorreiosRastreio) {
+			return TipoEntrega.CORREIOS;
+		} else if(r instanceof JadlogRastreio) {
+			return TipoEntrega.JADLOG;
+		} else {
+			return TipoEntrega.PARTICULAR; 
 		}
-		
-		return tipoEntrega;
 	}
 }

@@ -11,7 +11,8 @@ public class RastreioFactory {
 		} else if (codigoRastreio.matches(regexJadlog)) {
 			return new JadlogRastreio();
 		} else {
-			throw new IllegalArgumentException(codigoRastreio);
+//			throw new IllegalArgumentException(codigoRastreio);
+			return null;
 		}
 	}
 	
