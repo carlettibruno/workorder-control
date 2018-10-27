@@ -12,6 +12,7 @@ import org.csi.controle.core.entidade.ClienteAcesso;
 import org.csi.controle.core.entidade.Endereco;
 import org.csi.controle.core.entidade.Usuario;
 import org.csi.controle.core.util.Codigo;
+import org.csi.controle.core.util.DadosUtil;
 import org.csi.controle.core.util.RetornoServico;
 import org.csi.controle.servico.ClienteService;
 
@@ -52,7 +53,7 @@ public class ClienteServiceImpl extends UsuarioServiceImpl implements ClienteSer
 			manterClienteAcesso(cliente);
 			
 			if(cliente.getAprovacaoFoto() == null) {
-				cliente.setAprovacaoFoto(true);
+				cliente.setAprovacaoFoto(DadosUtil.DEFAULT_APPROVAL_PHOTOS);
 			}
 			em.persist(cliente);
 			return new RetornoServico<Cliente>(Codigo.SUCESSO);
@@ -87,7 +88,7 @@ public class ClienteServiceImpl extends UsuarioServiceImpl implements ClienteSer
 			clienteBase.setCpfCnpj(cliente.getCpfCnpj());
 			clienteBase.setDataModificacao(new Date());
 			if(cliente.getAprovacaoFoto() == null) {
-				clienteBase.setAprovacaoFoto(true);
+				clienteBase.setAprovacaoFoto(DadosUtil.DEFAULT_APPROVAL_PHOTOS);
 			} else {
 				clienteBase.setAprovacaoFoto(cliente.getAprovacaoFoto());
 			}

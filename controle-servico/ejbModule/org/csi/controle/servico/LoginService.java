@@ -17,11 +17,9 @@ import javax.ws.rs.QueryParam;
 import org.csi.controle.core.entidade.Permissao;
 import org.csi.controle.core.to.Login;
 import org.csi.controle.core.util.RetornoServico;
-import org.csi.controle.servico.interceptor.NotSecure;
 
 @Local
 @Path("/login")
-@NotSecure
 public interface LoginService {
 
 	@POST

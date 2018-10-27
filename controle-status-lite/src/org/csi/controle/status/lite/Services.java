@@ -4,89 +4,50 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import org.csi.controle.core.to.EtapaTO;
-import org.csi.controle.core.to.Login;
-import org.csi.controle.core.util.RetornoServico;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 public class Services {
-
+	
 	private static Services instancia;
-	
+
 	private String token;
-	
-	private String URL;
-	
-	private String usuario;
-	
-	private String senha;
-	
+
+	private String baseUrl;
+
 	private Services() throws IOException {
 		super();
 	}
-	
-	public static Services getInstancia(String caminho, String usuario, String senha) throws IOException {
+
+	public static Services getInstancia(String baseUrl) throws IOException {
 		if(instancia == null) {
 			instancia = new Services();
-			instancia.setSenha(senha);
-			instancia.setUsuario(usuario);
-			instancia.setURL(caminho);
-			instancia.gerarToken();
+			instancia.token = Constants.KEY;
+			instancia.baseUrl = baseUrl;
 		}
 		return instancia;
 	}
 
-	@SuppressWarnings("unchecked")
-	private void gerarToken() throws IOException {
-		Login login = new Login();
-		login.setUsuario(usuario);
-		login.setSenha(senha);
-		login.setManterConectado(true);
-		Gson gson = new Gson();
-		String jsonRequest = gson.toJson(login);
-		String json = request(URL + "login", "POST", "", jsonRequest);
-		RetornoServico<String> retorno = gson.fromJson(json, RetornoServico.class);
-		token = retorno.getData();
-	}
-	
-	public void notificar(Integer idEtapa) {
+	public void notificar() {
 		try {
-			EtapaTO etapaTo = new EtapaTO();
-			etapaTo.setIdEtapa(idEtapa);
-			etapaTo.setIpInterno(InetAddress.getLocalHost().getHostAddress());
-			Gson gson = new Gson();
-			String json = gson.toJson(etapaTo);
-			request(URL + "etapa/notificar", "PUT", token, json);
+			String macAddress = Util.getMacAddress();
+			request(this.baseUrl + "/etapa/notificar", "PUT", token, macAddress, "text/plain");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private Long obterIdOriginal(Integer codigoOs) throws Exception {
-		String json = request(URL + "depara/ordemservico/"+codigoOs, "GET", token, null);
-		Gson gson = new Gson();
-		Type listType = new TypeToken<RetornoServico<Long>>() {}.getType();
-		RetornoServico<Long> retorno = gson.fromJson(json, listType);
-		if(retorno.getCodigo() != 0) {
-			throw new Exception(retorno.getMensagem());
+
+	public void mudarServico(Integer codigoOs) {
+		try {
+			String dataPost = String.format("{\"reference\":\"%s\",\"oscode\":\"%s\"}", Util.getMacAddress(), codigoOs);
+			request(this.baseUrl + "/historico", "POST", token, dataPost, "application/json");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return retorno.getData();
 	}
-	
-	public void mudarServico(Integer codigoOs, Integer idEtapa) throws Exception {
-		Long idOriginal = obterIdOriginal(codigoOs);
-		request(URL + "ordemservico/"+idOriginal+"/historico?proximoIdEtapa="+idEtapa, "POST", token, null);
-	}
-	
-	private String request(String urlStr, String method, String token, String jsonPost) throws IOException {
+
+	private String request(String urlStr, String method, String token, String data, String contentType) throws Exception {
 		URL url = new URL(urlStr);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestProperty("token", token);
@@ -94,15 +55,15 @@ public class Services {
 		connection.setUseCaches(false);
 		connection.setDoInput(true);
 		connection.setDoOutput(true);
-		
-		if(jsonPost != null) {
-		    connection.setRequestProperty("Content-Type", "application/json");
+
+		if(data != null) {
+			connection.setRequestProperty("Content-Type", contentType);
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-			wr.writeBytes(jsonPost);
+			wr.writeBytes(data);
 			wr.flush ();
 			wr.close ();
 		}
-		
+
 		BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream(),Charset.forName("UTF-8")));
 		String response = "";
 		String line = "";
@@ -111,30 +72,6 @@ public class Services {
 		}
 		rd.close();
 		return response;
-	}
-
-	public String getURL() {
-		return URL;
-	}
-
-	public void setURL(String uRL) {
-		URL = uRL;
-	}
-
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
 	}
 
 }

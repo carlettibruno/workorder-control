@@ -8,23 +8,18 @@ public class StatusMain {
 
 	public static void main(String[] args) throws IOException {
 		String url = args[0];
-		String usuario = args[1];
-		String senha = args[2];
-		Integer idEtapa = Integer.parseInt(args[3]);
-		Services services = Services.getInstancia(url, usuario, senha);
-		Thread thread = new Thread(new Notificador(services, idEtapa));
+		Services services = Services.getInstancia(url);
+		Thread thread = new Thread(new Notificador(services));
 		thread.start();
 		while(true) {
 			try {
 				BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 				String codigoOs = bufferRead.readLine();
-				services.mudarServico(Integer.parseInt(codigoOs), idEtapa);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				services.mudarServico(Integer.parseInt(codigoOs));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 }

@@ -9,13 +9,10 @@ import java.util.StringTokenizer;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.mail.Session;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.UserTransaction;
 
 import org.apache.commons.fileupload.util.Streams;
 import org.csi.controle.core.entidade.ChaveConfiguracao;
@@ -61,9 +58,6 @@ public class EnvioServiceImpl implements EnvioService {
 	
 	@Resource(name="java:/Mail")
 	private Session mailSession;	
-	
-    @Resource 
-    private UserTransaction ut;	
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -146,12 +140,11 @@ public class EnvioServiceImpl implements EnvioService {
 	}
 	
 	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public RetornoServico<String> inserirEnvioInfoOs(Integer idEnvio, MultipartFormDataInput data) {
+	public RetornoServico<Envio> inserirEnvioInfoOs(Integer idEnvio, MultipartFormDataInput data) {
 		try {
 			RetornoServico<Envio> retornoEnvio = obterEnvio(idEnvio);
 			if(retornoEnvio.getCodigo().intValue() == Codigo.ERRO) {
-				return new RetornoServico<String>(Codigo.ERRO, retornoEnvio.getMensagem(), null);
+				return new RetornoServico<Envio>(Codigo.ERRO, retornoEnvio.getMensagem(), null);
 			}
 			Envio envio = retornoEnvio.getData();
 			List<InputPart> parts = data.getParts();
@@ -160,40 +153,34 @@ public class EnvioServiceImpl implements EnvioService {
 				InputStream inputStream = part.getBody(InputStream.class,null);
 				String arquivoStr = Streams.asString(inputStream, "ISO-8859-1");
 				StringTokenizer st = new StringTokenizer(arquivoStr, "\n");
-	            envio.setTotal(st.countTokens() - 1);
-	            ut.begin();
-	            em.merge(envio);
-	            ut.commit();	            
+	            envio.setTotal(0);
 	            
 	            st.nextElement(); //pula cabeçalho
 	            while (st.hasMoreElements()) {	
 	            	String linha = (String) st.nextElement();
 	            	try {
 		            	List<String> codigosOs = conversor.txtToIdOrdemServicoNotaFiscal(linha);
+		            	envio.setTotal(codigosOs.size() + envio.getTotal());
 		            	for (String codigoOs : codigosOs) {
 			            	RetornoServico<OrdemServico> retornoOs = ordemServicoService.obterOrdemServico(codigoOs);
 			            	if(retornoOs.getData() != null) {	            		
 			            		ordemServicoService.atualizarNotaFiscal(retornoOs.getData().getId(), conversor.txtToNotaFiscal(linha));
 			            	}
 			            	envio.setQtdeCarregada(envio.getQtdeCarregada() + 1);
-			            	ut.begin();
-			            	em.merge(envio);
-			            	ut.commit();
 		            	}
 	            	} catch (Exception e) {
 	            		e.printStackTrace();
 					}
 				}
 			}
-			return new RetornoServico<String>(Codigo.SUCESSO);
+			return new RetornoServico<Envio>(Codigo.SUCESSO, envio);
 		} catch (Exception e) {
-			return new RetornoServico<String>(Codigo.ERRO, e.getMessage(), null);
+			return new RetornoServico<Envio>(Codigo.ERRO, e.getMessage(), null);
 		}
 		
 	}
 	
 	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public RetornoServico<Envio> inserirClientes(Integer idEnvio, MultipartFormDataInput data) {
 		try {
 			RetornoServico<Envio> retornoEnvio = obterEnvio(idEnvio);
@@ -209,9 +196,6 @@ public class EnvioServiceImpl implements EnvioService {
 				String arquivoStr = Streams.asString(inputStream, "ISO-8859-1");
 				StringTokenizer st = new StringTokenizer(arquivoStr, "\n");
 	            envio.setTotal(st.countTokens() - 1);
-	            ut.begin();
-	            em.merge(envio);
-	            ut.commit();
 	            
 	            st.nextElement(); //pula cabeçalho
 	            while (st.hasMoreElements()) {
@@ -228,9 +212,6 @@ public class EnvioServiceImpl implements EnvioService {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-	            	ut.begin();
-	            	em.merge(envio);
-	            	ut.commit();
 				}
 			}
 			return new RetornoServico<Envio>(Codigo.SUCESSO, envio);
@@ -246,6 +227,7 @@ public class EnvioServiceImpl implements EnvioService {
 			Envio envio = em.find(Envio.class, idEnvio);
 			return new RetornoServico<Envio>(Codigo.SUCESSO, envio);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new RetornoServico<Envio>(Codigo.ERRO, e.getMessage());
 		}
 	}

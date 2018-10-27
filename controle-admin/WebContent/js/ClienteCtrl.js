@@ -105,7 +105,7 @@ function ClienteCtrl($scope, $http, $interval, $upload) {
 	};	
 	
 	$scope.novo = function() {
-		$scope.cliente = {idCliente: 0, aprovacaoFoto: true};
+		$scope.cliente = {idCliente: 0, aprovacaoFoto: false};
 		$scope.retorno = null;
 	};
 	
@@ -149,10 +149,10 @@ function ClienteCtrl($scope, $http, $interval, $upload) {
 	};
 	
 	$scope.checkImportarClientes = function() {
-		var http = $http({url: 'services/envio/'+$scope.envio.idEnvio+'?'+new Date().getTime(), method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
-		http.success(function (data, status, headers, config) {
-			$scope.envio = data.data;
-		});
+//		var http = $http({url: 'services/envio/'+$scope.envio.idEnvio+'?'+new Date().getTime(), method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
+//		http.success(function (data, status, headers, config) {
+//			$scope.envio = data.data;
+//		});
 	};
 	
 	$scope.gerarNovaSenha = function(cliente) {

@@ -26,6 +26,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 	$scope.envio = null;
 	$scope.carregandoAprovacao = false;
 	$scope.campoPesquisa = "";
+	$scope.envioFinalizado = null;
 	$scope.planilha = null;
 
 	$scope.reset = function() {
@@ -336,6 +337,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 	};
 
 	$scope.importarServicos = function() {
+		$scope.envioFinalizado = null;
 		$scope.importando = true;
 		var envio = {"entidade": "ORDEM_SERVICO"};
 		var http = $http({url: 'services/envio', method: "POST", data: envio, headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
@@ -353,6 +355,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 			}).then(function(response) {
 				$scope.importando = false;
 				$interval.cancel($scope.intervalo);
+				$scope.envioFinalizado = response.data.data;
 			}, null, function(evt) {
 			}).xhr(function(xhr){
 			});
@@ -365,10 +368,10 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 	};
 
 	$scope.checkImportar = function() {
-		var http = $http({url: 'services/envio/'+$scope.envio.idEnvio+'?'+new Date().getTime(), method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
-		http.success(function (data, status, headers, config) {
-			$scope.envio = data.data;
-		});
+//		var http = $http({url: 'services/envio/'+$scope.envio.idEnvio+'?'+new Date().getTime(), method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
+//		http.success(function (data, status, headers, config) {
+//			$scope.envio = data.data;
+//		});
 	};
 
 	$scope.manterAprovacao = function(foto) {

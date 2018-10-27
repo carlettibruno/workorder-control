@@ -16,6 +16,7 @@
         <module>controle-admin</module>
         <module>controle-cliente</module>
 				<module>controle-ear</module>
+        <module>controle-status-lite</module>
     </modules>
 
     <build>

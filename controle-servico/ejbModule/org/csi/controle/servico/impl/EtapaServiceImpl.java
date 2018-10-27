@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.csi.controle.core.entidade.Etapa;
 import org.csi.controle.core.entidade.TipoEntrega;
-import org.csi.controle.core.to.EtapaTO;
 import org.csi.controle.core.util.Codigo;
 import org.csi.controle.core.util.DadosUtil;
 import org.csi.controle.core.util.RetornoServico;
@@ -28,17 +27,14 @@ public class EtapaServiceImpl implements EtapaService {
 	@Override
 	public RetornoServico<List<Etapa>> obterEtapas() {
 		try {			
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.MINUTE, -10);
+			Date limitNotifyAlive = calendar.getTime();
 			Query query = em.createQuery("SELECT e FROM Etapa e ORDER BY e.nome");
 			List<Etapa> etapas = query.getResultList();
 			for (Etapa etapa : etapas) {
-				if(etapa.getDataUltimaAtualizacao() == null) {
-					etapa.setDisponivel(false);
-					continue;
-				}
-				Calendar calendario = Calendar.getInstance();
-				calendario.setTime(etapa.getDataUltimaAtualizacao());
-				calendario.add(Calendar.MINUTE, 10);
-				etapa.setDisponivel(calendario.getTime().after(new Date()));
+				boolean unavailable = etapa.getDataUltimaAtualizacao() == null || limitNotifyAlive.after(etapa.getDataUltimaAtualizacao());
+				etapa.setDisponivel(!unavailable);
 			}
 			return new RetornoServico<List<Etapa>>(Codigo.SUCESSO, etapas);
 		} catch (Exception e) {
@@ -167,12 +163,34 @@ public class EtapaServiceImpl implements EtapaService {
 	}
 
 	@Override
-	public void notificarEtapa(EtapaTO etapaTo, HttpServletRequest request) {
-		Etapa etapa = em.find(Etapa.class, etapaTo.getIdEtapa());
-		String ip = request.getRemoteAddr();
-		etapa.setIpExterno(ip);
-		etapa.setDataUltimaAtualizacao(new Date());
-		etapa.setIp(etapaTo.getIpInterno());
+	public void notificarEtapa(String reference, HttpServletRequest request) {
+		Etapa etapa = findEtapaByReference(reference).getData();
+		if(etapa == null) {
+			etapa = new Etapa();
+			etapa.setReference(reference);
+			etapa.setDisponivel(true);
+			etapa.setIpExterno(request.getRemoteAddr());
+			etapa.setNome(reference + " - Mudar o nome");
+			this.inserirEtapa(etapa);
+		} else {
+			String ip = request.getRemoteAddr();
+			etapa.setIpExterno(ip);
+			etapa.setDataUltimaAtualizacao(new Date());
+			etapa.setDisponivel(true);
+			this.em.merge(etapa);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public RetornoServico<Etapa> findEtapaByReference(String reference) {
+		Query query = em.createQuery("SELECT e FROM Etapa e WHERE e.reference = :ref");
+		query.setParameter("ref", reference);
+		List<Etapa> etapas = query.getResultList();
+		if(etapas.isEmpty()) {
+			return new RetornoServico<Etapa>(Codigo.SUCESSO);
+		}
+		return new RetornoServico<Etapa>(Codigo.SUCESSO, etapas.get(0));
 	}
 
 }

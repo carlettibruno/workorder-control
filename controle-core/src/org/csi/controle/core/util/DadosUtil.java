@@ -14,6 +14,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class DadosUtil {
+	
+	public static final boolean DEFAULT_APPROVAL_PHOTOS = false;
 
 	public static void main(String[] args) {
 		try {
@@ -101,6 +103,9 @@ public class DadosUtil {
 	}
 	
 	public static String formatarDiffData(Date dataInicial, Date dataFinal) {
+		if(dataFinal == null || dataInicial == null) {
+			return "";
+		}
 		long segundos = (dataFinal.getTime() - dataInicial.getTime()) / 1000;
 		int dias = (int)Math.floor(segundos / 86400);
 		segundos -= dias * 86400;

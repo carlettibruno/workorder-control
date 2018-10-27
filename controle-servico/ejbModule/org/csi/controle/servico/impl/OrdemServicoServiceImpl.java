@@ -406,13 +406,17 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RetornoServico<OrdemServico> obterOrdemServico(String codigoOs) {
 		try {
 			Query query = em.createQuery("SELECT os FROM OrdemServico os WHERE os.numero = :numero");
 			query.setParameter("numero", codigoOs);
-			OrdemServico os = (OrdemServico) query.getSingleResult();
-			return new RetornoServico<OrdemServico>(Codigo.SUCESSO, os);
+			List<OrdemServico> os = query.getResultList();
+			if(os.isEmpty()) {
+				return new RetornoServico<OrdemServico>(Codigo.SUCESSO);
+			}
+			return new RetornoServico<OrdemServico>(Codigo.SUCESSO, os.get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new RetornoServico<OrdemServico>(Codigo.ERRO, e.getMessage(), null);

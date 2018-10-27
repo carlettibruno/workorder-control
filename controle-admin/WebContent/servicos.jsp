@@ -28,14 +28,13 @@
 								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 						</div>
+						<div class="span6" ng-show="envioFinalizado != null">
+							Envio concluído. Total: <b>{{envioFinalizado.total}}</b>, carregado: <b>{{envioFinalizado.qtdeCarregada}}</b>.
+						</div>						
 						<div class="span6" ng-show="importando">
-							<div class="progress progress-striped active span5">
-								<div class="bar" style="width: {{(envio.qtdeCarregada / envio.total) * 100}}%;"></div>
-							</div>
-							<br/>
 							<br/>
 							<center>
-							<p>{{envio.qtdeCarregada}} de {{envio.total}} serviços</p>
+							<p><img src="img/ajax-loader.gif"> aguarde carregando informações...</p>
 							</center>
 						</div>
 					</div>
@@ -89,7 +88,7 @@
 
 							<div class="row" ng-repeat="historico in historicos">
 								<div class="span6">
-									<h4>{{historico.etapa.nome}} <span ng-show="historico.status != 'Em andamento'" class="osFechada">({{historico.status}})</span><span ng-show="historico.status == 'Em andamento'" class="osAberta">({{historico.status}})</span</h4>
+									<h4>{{historico.etapa.nome}} <span ng-show="historico.status != 'Em andamento'" class="osFechada">({{historico.status}})</span><span ng-show="historico.status == 'Em andamento'" class="osAberta">({{historico.status}})</span></h4>
 								</div>
 								<div class="span1">In&iacute;cio</div>
 								<div class="span4"><b>{{historico.dataInicio | date: 'dd/MM/yyyy HH:mm:ss'}}</b></div>
@@ -436,6 +435,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ServicoCtrl.js?v20180522"></script>
+<script src="js/ServicoCtrl.js?v20181027"></script>
 </body>
 </html>

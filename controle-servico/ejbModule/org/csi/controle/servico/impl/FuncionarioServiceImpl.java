@@ -50,7 +50,7 @@ public class FuncionarioServiceImpl extends UsuarioServiceImpl implements Funcio
 			funcionario.setDataModificacao(new Date());
 			funcionario.setLogin(funcionario.getEmail());
 			RetornoServico<Usuario> retornoUsuario = existeLogin(funcionario.getLogin());
-			if (retornoUsuario != null) {
+			if (retornoUsuario.getData() != null) {
 				return new RetornoServico<Funcionario>(Codigo.ERRO, "Usuário já existe com o login: "+funcionario.getLogin());
 			}
 			manterSenhaUsuario(funcionario, true);

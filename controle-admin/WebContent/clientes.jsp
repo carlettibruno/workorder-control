@@ -123,13 +123,9 @@
 							Envio concluído. Total: <b>{{envioFinalizado.total}}</b>, carregado: <b>{{envioFinalizado.qtdeCarregada}}</b>.
 						</div>
 						<div class="span6" ng-show="importando">
-							<div class="progress progress-striped active span5">
-								<div class="bar" style="width: {{(envio.qtdeCarregada / envio.total) * 100}}%;"></div>
-							</div>
-							<br/>
 							<br/>
 							<center>
-							<p>{{envio.qtdeCarregada}} de {{envio.total}} clientes</p>
+							<p><img src="img/ajax-loader.gif"> aguarde cadastrando os clientes...</p>
 							</center>
 						</div>
 					</div>
@@ -215,6 +211,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ClienteCtrl.js?v20140819"></script>
+<script src="js/ClienteCtrl.js?v20181027"></script>
 </body>
 </html>

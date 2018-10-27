@@ -7,11 +7,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.csi.controle.core.util.RetornoServico;
-import org.csi.controle.servico.interceptor.NotSecure;
 
 @Local
 @Path("/depara")
-@NotSecure
 public interface DeParaService {
 
 	@GET

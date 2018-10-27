@@ -17,7 +17,7 @@
 		<class>org.csi.controle.core.entidade.EnvioFoto</class>
 		<class>org.csi.controle.core.entidade.Erro</class>
 		<class>org.csi.controle.core.entidade.FilaImpressora</class>
-		<class>org.csi.controle.core.entidade.TipoEntrega</class>
+<!-- 		<class>org.csi.controle.core.entidade.TipoEntrega</class> -->
 		<class>org.csi.controle.core.entidade.Foto</class>
 		<class>org.csi.controle.core.entidade.Funcionario</class>
 		<class>org.csi.controle.core.entidade.Grupo</class>
@@ -32,7 +32,7 @@
         <properties>
           	<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+<!-- 			<property name="hibernate.hbm2ddl.auto" value="update" /> -->
         </properties>
     </persistence-unit>
 </persistence>

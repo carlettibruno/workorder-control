@@ -16,9 +16,7 @@ import javax.ws.rs.core.Context;
 
 import org.csi.controle.core.entidade.Etapa;
 import org.csi.controle.core.entidade.TipoEntrega;
-import org.csi.controle.core.to.EtapaTO;
 import org.csi.controle.core.util.RetornoServico;
-import org.csi.controle.servico.interceptor.NotSecure;
 
 @Local
 @Path("/etapa")
@@ -58,11 +56,15 @@ public interface EtapaService {
 
 	RetornoServico<Etapa> obterEtapaInicial();
 	
+	@GET
+	@Path("/reference/{ref}")
+	@Produces("application/json")
+	RetornoServico<Etapa> findEtapaByReference(@PathParam("ref") String reference);
+	
 	@PUT
 	@Path("/notificar")
-	@Consumes("application/json")
-	@NotSecure
-	void notificarEtapa(EtapaTO etapaTo, @Context HttpServletRequest req);
+	@Consumes("text/plain")
+	void notificarEtapa(String reference, @Context HttpServletRequest req);
 	
 	void limparEtapaInicial();
 	

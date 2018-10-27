@@ -42,7 +42,7 @@ public interface EnvioService {
 	@Path("/{id}/infoos")
 	@Produces("application/json")
 	@Consumes("multipart/form-data")
-	RetornoServico<String> inserirEnvioInfoOs(@PathParam("id") Integer idEnvio, MultipartFormDataInput data);
+	RetornoServico<Envio> inserirEnvioInfoOs(@PathParam("id") Integer idEnvio, MultipartFormDataInput data);
 	
 	@GET
 	@Path("/{id}")

@@ -51,6 +51,9 @@ public class Etapa implements EntidadeControlada {
 	
 	@Column(name="DATA_ULTIMA_ATUALIZACAO")
 	private Date dataUltimaAtualizacao;
+	
+	@Column(name="REFERENCIA")
+	private String reference;
 
 	public Integer getIdEtapa() {
 		return idEtapa;
@@ -156,6 +159,14 @@ public class Etapa implements EntidadeControlada {
 
 	public void setIpExterno(String ipExterno) {
 		this.ipExterno = ipExterno;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 }
