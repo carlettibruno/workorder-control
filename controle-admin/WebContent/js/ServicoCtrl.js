@@ -1,4 +1,4 @@
-var app = angular.module('app', ['angularFileUpload', 'datePicker']);
+var app = angular.module('app', ['angularFileUpload', 'datePicker', 'ngMask']);
 
 function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 
@@ -116,8 +116,18 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 
 	$scope.salvar = function() {
 		$scope.salvando = true;
+		$scope.ordemServico.previsaoEntrega = moment($scope.ordemServico.previsaoEntregaTxt, 'DD/MM/YYYY');
+		delete $scope.ordemServico.previsaoEntregaTxt;
+		angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
+			value.dataVencimento = moment(value.dataVencimentoTxt, 'DD/MM/YYYY');
+			delete value.dataVencimentoTxt;
+		});
 		var http = $http({url: 'services/ordemservico/' + $scope.ordemServico.idOrdemServico, data: $scope.ordemServico, method: "PUT", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
 		http.success(function (data, status, headers, config) {
+			$scope.ordemServico.previsaoEntregaTxt = $scope.ordemServico.previsaoEntrega.format('DD/MM/YYYY');
+			angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
+				value.dataVencimentoTxt = moment(value.dataVencimento).format('DD/MM/YYYY');
+			});			
 			$scope.carregandoFotos = true;
 			$scope.verificaSalvamentoOs();
 			angular.forEach($scope.enderecos, function(value, key){
@@ -244,6 +254,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 		$scope.reset();
 
 		$scope.ordemServico = ordemServico;
+		$scope.ordemServico.previsaoEntregaTxt = moment($scope.ordemServico.previsaoEntrega).format('DD/MM/YYYY');
 		$scope.retorno = null;
 
 		var httpEtapa = $http({url: 'services/etapa', method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
@@ -264,6 +275,9 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 			var httpDetalhesNota = $http({url: 'services/ordemservico/'+ordemServico.idOrdemServico+'/notafiscal/'+ordemServico.notaFiscal.idNotaFiscal, method: "GET", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, params: {'nocache': new Date().getTime()}});
 			httpDetalhesNota.success(function (data, status, headers, config) {
 				ordemServico.notaFiscal.detalhesNota = data.data;
+				angular.forEach(ordemServico.notaFiscal.detalhesNota, function(value, key) {
+					value.dataVencimentoTxt = moment(value.dataVencimento).format('DD/MM/YYYY');
+				});
 			});
 		}
 	};

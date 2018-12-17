@@ -73,7 +73,7 @@
 							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="previsao">Previsão de entrega</label>
 								<div class="controls">
-                  <input date-time ng-model="ordemServico.previsaoEntrega" id="previsao" view="date" min-view="date" format="DD/MM/YYYY">
+                  				<input mask="39/19/2099" ng-model="ordemServico.previsaoEntregaTxt" id="previsao">
 								</div> <!-- /controls -->
 							</div> <!-- /control-group -->
 							<div class="control-group" ng-show="!visualizar">
@@ -197,7 +197,7 @@
 								</div> <!-- /controls -->
 								<div class="controls span5" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
 									<div class="span1"><span ng-show="{{$index == 0}}">Vencimentos</span><span ng-show="{{$index > 0}}">&nbsp;</span></div>
-									<div class="span3"><b>{{detalheNota.dataVencimento | date: 'dd/MM/yyyy'}}</b></div>
+									<div class="span3"><b>{{detalheNota.dataVencimentoTxt}}</b></div>
 								</div>
 							</div> <!-- /control-group -->
 
@@ -337,7 +337,7 @@
 						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
 					<div class="control-group">
-						<label class="control-label" for="dataVencimento">Paga</label>
+						<label class="control-label" for="paga">Paga</label>
 						<div class="controls">
 							<input type="checkbox" class="span3" id="paga" ng-model="ordemServico.notaFiscal.paga">
 						</div> <!-- /controls -->
@@ -352,7 +352,7 @@
 					<div class="control-group">
 						<label class="control-label">Vencimentos</label>
 						<div class="controls" ng-repeat="detalheNota in ordemServico.notaFiscal.detalhesNota">
-							<input date-time ng-model="detalheNota.dataVencimento" class="span3" view="date" min-view="date" format="DD/MM/YYYY"><button type="button" class="btn btn-danger" title="Remover vencimento" ng-click="removerDetalheNota(detalheNota)"><i class="icon-trash"></i></button>
+							<input mask="39/19/2099" ng-model="detalheNota.dataVencimentoTxt" id="dtVencimento"><button type="button" class="btn btn-danger" title="Remover vencimento" ng-click="removerDetalheNota(detalheNota)"><i class="icon-trash"></i></button>
 						</div> <!-- /controls -->
 					</div> <!-- /control-group -->
 
@@ -435,6 +435,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ServicoCtrl.js?v20181027"></script>
+<script src="js/ServicoCtrl.js?v20181217"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@
             </div>
             <!-- /widget-header -->
             <div class="widget-content">
-            <form ng-submit="salvar()">
+            <form>
 			<div class="alert alert-success" ng-show="retorno.codigo == 0 && !salvando && !carregandoFotos && !carregandoEndereco">
 			  <button type="button" class="close" data-dismiss="alert">&times;</button>
 			  <strong>Sucesso!</strong> Serviço gerado. <a href="servicos.jsp">Clique aqui</a> para listar os serviços.
@@ -60,7 +60,7 @@
 						<div class="control-group">
 							<label class="control-label" for="descricao">Previsão de entrega</label>
 							<div class="controls">
-                <input date-time ng-model="ordemServico.previsaoEntrega" id="previsao" view="date" min-view="date" format="DD/MM/YYYY">
+                				<input mask="39/19/2099" ng-model="ordemServico.previsaoEntregaTxt" id="previsao">
 								<p class="help-block">Data prevista de entrega para o cliente.</p>
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
@@ -137,7 +137,7 @@
 			</div>
 			<div class="form-actions">
 				<img src="img/ajax-loader.gif" ng-show="salvando || carregandoFotos || carregandoEndereco">
-				<button type="submit" class="btn btn-primary" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Gerar OS</button>
+				<button type="button" ng-click="salvar()" class="btn btn-primary" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Gerar OS</button>
 				<a class="btn" href="servicos.jsp"  ng-disabled="salvando || carregandoFotos || carregandoEndereco">Cancelar</a>
 				<span ng-show="salvando || carregandoFotos || carregandoEndereco">Aguarde... </span>
 				<span ng-show="salvando">Salvando OS.</span>
@@ -211,6 +211,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/GerarOrdemServicoCtrl.js?v20150203"></script>
+<script src="js/GerarOrdemServicoCtrl.js?v20181217"></script>
 </body>
 </html>

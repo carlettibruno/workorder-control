@@ -266,7 +266,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 //				Double percentualImagem = checkProtocolo.percentualProtocolo(new File(caminhoCompleto));
 //				Double percentualImagem = checkProtocolo.percentualProtocolo(new File(caminhoCompleto));
 //				if(percentualImagem > percento) {
-					encerrarPorEntrega(idOrdemServico, TipoEntrega.PARTICULAR.toString());
+//					encerrarPorEntrega(idOrdemServico, TipoEntrega.PARTICULAR.toString());
 //				}
 			}
 			if(foto != null) {
@@ -489,24 +489,33 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServicoBase.getNotaFiscal().setNumero(notaFiscal.getNumero());
 			ordemServicoBase.getNotaFiscal().setValor(notaFiscal.getValor());
 			ordemServicoBase.getNotaFiscal().setPaga(notaFiscal.getPaga());
-
+			em.merge(ordemServicoBase.getNotaFiscal());
+			
 			List<DetalheNota> detalhesNotaBase = ordemServicoBase.getNotaFiscal().getDetalhesNota();
 			if(detalhesNotaBase == null) {
 				detalhesNotaBase = new ArrayList<DetalheNota>();
 			}
-
-			for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
-				boolean existe = false;
-				for (DetalheNota detalheNotaBase : detalhesNotaBase) {
-					if(detalheNotaBase.getDataVencimento().compareTo(detalheNota.getDataVencimento()) == 0) {
-						existe = true;
+			
+			for (DetalheNota detalheNotaBase : detalhesNotaBase) {
+				boolean existsInvoice = false;
+				for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
+					if (detalheNotaBase.equals(detalheNota)) {
+						existsInvoice = true;
+						break;
 					}
 				}
-				if(!existe) {
-					detalheNota.setNotaFiscal(ordemServicoBase.getNotaFiscal());
+				if (!existsInvoice) {
+					em.remove(detalheNotaBase);
+				}			
+			}			
+
+			for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
+				detalheNota.setNotaFiscal(ordemServicoBase.getNotaFiscal());
+				if(detalheNota.getIdDetalheNota() == null) {
 					detalhesNotaBase.add(detalheNota);
 					em.persist(detalheNota);
-					em.merge(ordemServicoBase.getNotaFiscal());
+				} else {
+					em.merge(detalheNota);
 				}
 			}
 		}

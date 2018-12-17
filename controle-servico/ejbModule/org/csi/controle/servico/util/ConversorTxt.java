@@ -89,20 +89,23 @@ public class ConversorTxt {
 	}
 	
 	public Cliente txtToCliente(String linha) throws Exception {
-		if(linha.length() != 303 && linha.length() != 304) {
+		String[] contents = linha.split("\t");
+		if(contents.length != 10) {
 			throw new Exception("Padrão txt invalido.");
 		}
 		Cliente cliente = new Cliente();
-		cliente.setCpfCnpj(linha.substring(0, 19).trim());
-		cliente.setNome(linha.substring(19, 45).trim());
-		cliente.setEmail(linha.substring(45, 96).trim());
+		int i = 0;
+		cliente.setCode(contents[i++].trim());
+		cliente.setCpfCnpj(contents[i++].trim());
+		cliente.setNome(contents[i++].trim());
+		cliente.setEmail(contents[i++].trim());
 		Endereco endereco = new Endereco();
-		endereco.setEndereco(linha.substring(96, 152).trim());
-		endereco.setCep(linha.substring(152, 162).trim());
-		endereco.setComplemento(linha.substring(162, 243).trim());
-		endereco.setBairro(linha.substring(243, 269).trim());
-		endereco.setEstado(linha.substring(269, 273).trim());
-		endereco.setCidade(linha.substring(273, 303).trim());
+		endereco.setEndereco(contents[i++].trim());
+		endereco.setCep(contents[i++].trim());
+		endereco.setComplemento(contents[i++].trim());
+		endereco.setBairro(contents[i++].trim());
+		endereco.setEstado(contents[i++].trim());
+		endereco.setCidade(contents[i++].trim());
 		cliente.setEndereco(endereco);
 		
 		return cliente;

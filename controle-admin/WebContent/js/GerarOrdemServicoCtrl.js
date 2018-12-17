@@ -1,4 +1,4 @@
-var app = angular.module('app', ['angularFileUpload', 'datePicker']);
+var app = angular.module('app', ['angularFileUpload', 'datePicker', 'ngMask']);
 
 function GerarOrdemServicoCtrl($scope, $http, $upload) {
 
@@ -40,8 +40,11 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 		$scope.salvando = true;
 		$scope.carregandoFotos = true;
 		$scope.carregandoEndereco = true;
+		$scope.ordemServico.previsaoEntrega = moment($scope.ordemServico.previsaoEntregaTxt, 'DD/MM/YYYY');
+		delete $scope.ordemServico.previsaoEntregaTxt;
 		var http = $http({url: 'services/ordemservico', data: $scope.ordemServico, method: "POST", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
 		http.success(function (data, status, headers, config) {
+			$scope.ordemServico.previsaoEntregaTxt = $scope.ordemServico.previsaoEntrega.format('DD/MM/YYYY');
 			if(data.codigo > 0) {
 				$scope.resetCarregando();
 				$scope.retorno = data;

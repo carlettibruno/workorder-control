@@ -22,6 +22,9 @@ public class Cliente implements EntidadeControlada {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID_CLIENTE")
 	private Integer idCliente;
+
+	@Column(name="CODE")
+	private String code;
 	
 	@Column(name="CPF_CNPJ", nullable=false)
 	private String cpfCnpj;
@@ -167,6 +170,14 @@ public class Cliente implements EntidadeControlada {
 				+ ", dataCriacao=" + dataCriacao + ", email=" + email
 				+ ", dataModificacao=" + dataModificacao + ", ativo=" + ativo
 				+ "]";
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

@@ -11,3 +11,4 @@
 <script src="js/moment.min.js"></script>
 <script src="js/moment-timezone-with-data.min.js"></script>
 <script src="js/angular-datepicker.min.js"></script>
+<script src="js/ngMask.min.js"></script>

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +42,7 @@ public class NotaFiscal implements Serializable {
 	@Column(name="PAGA")
 	private Boolean paga;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany
 	@JoinColumn(name="ID_NOTA_FISCAL")
 	private List<DetalheNota> detalhesNota;
 
