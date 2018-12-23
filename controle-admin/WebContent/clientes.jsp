@@ -31,6 +31,12 @@
 					<div class="row">
 						<div class="span6">
 							<div class="control-group">
+								<label class="control-label">Zenite code</label>
+								<div class="controls">
+									<input type="text" class="span3" ng-model="cliente.code">
+								</div> <!-- /controls -->
+							</div> <!-- /control-group -->						
+							<div class="control-group">
 								<label class="control-label">Cpf/Cnpj</label>
 								<div class="controls">
 									<input type="text" class="span3" ng-model="cliente.cpfCnpj">
@@ -123,9 +129,13 @@
 							Envio concluído. Total: <b>{{envioFinalizado.total}}</b>, carregado: <b>{{envioFinalizado.qtdeCarregada}}</b>.
 						</div>
 						<div class="span6" ng-show="importando">
+							<div class="progress progress-striped active span5">
+								<div class="bar" style="width: {{(envio.qtdeCarregada / envio.total) * 100}}%;"></div>
+							</div>
+							<br/>						
 							<br/>
 							<center>
-							<p><img src="img/ajax-loader.gif"> aguarde cadastrando os clientes...</p>
+							<p>{{envio.qtdeCarregada}} de {{envio.total}} clientes</p>
 							</center>
 						</div>
 					</div>
@@ -211,6 +221,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ClienteCtrl.js?v20181027"></script>
+<script src="js/ClienteCtrl.js?v20181223"></script>
 </body>
 </html>

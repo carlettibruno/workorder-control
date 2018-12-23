@@ -146,10 +146,10 @@ public class ClienteServiceImpl extends UsuarioServiceImpl implements ClienteSer
 	}
 
 	@Override
-	public Cliente obterCliente(String documento) {
+	public Cliente obterCliente(String code) {
 		try {			
-			Query query = em.createQuery("SELECT c FROM Cliente c WHERE c.cpfCnpj = :documento AND c.ativo = :ativo");
-			query.setParameter("documento", documento);
+			Query query = em.createQuery("SELECT c FROM Cliente c WHERE c.code = :code AND c.ativo = :ativo");
+			query.setParameter("code", code);
 			query.setParameter("ativo", true);
 			Cliente cliente = (Cliente) query.getSingleResult();
 			return cliente;

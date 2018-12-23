@@ -16,7 +16,6 @@ import javax.persistence.Query;
 
 import org.apache.commons.fileupload.util.Streams;
 import org.csi.controle.core.entidade.ChaveConfiguracao;
-import org.csi.controle.core.entidade.Cliente;
 import org.csi.controle.core.entidade.Configuracao;
 import org.csi.controle.core.entidade.Entidade;
 import org.csi.controle.core.entidade.Envio;
@@ -32,6 +31,7 @@ import org.csi.controle.servico.ClienteService;
 import org.csi.controle.servico.ConfiguracaoService;
 import org.csi.controle.servico.EnvioService;
 import org.csi.controle.servico.FuncionarioService;
+import org.csi.controle.servico.ImportClienteService;
 import org.csi.controle.servico.OrdemServicoService;
 import org.csi.controle.servico.util.ConversorTxt;
 import org.csi.controle.servico.util.MailUtil;
@@ -46,6 +46,9 @@ public class EnvioServiceImpl implements EnvioService {
 	
 	@EJB
 	private OrdemServicoService ordemServicoService;
+	
+	@EJB
+	private ImportClienteService importClientService;	
 	
 	@EJB
 	private ClienteService clienteService;
@@ -190,29 +193,9 @@ public class EnvioServiceImpl implements EnvioService {
 			
 			Envio envio = retornoEnvio.getData();
 			List<InputPart> parts = data.getParts();
-			ConversorTxt conversor = new ConversorTxt();
 			for (InputPart part : parts) {
 				InputStream inputStream = part.getBody(InputStream.class,null);
-				String arquivoStr = Streams.asString(inputStream, "ISO-8859-1");
-				StringTokenizer st = new StringTokenizer(arquivoStr, "\n");
-	            envio.setTotal(st.countTokens() - 1);
-	            
-	            st.nextElement(); //pula cabeçalho
-	            while (st.hasMoreElements()) {
-	            	String linha = (String) st.nextElement();
-	            	try {						
-	            		Cliente cliente = conversor.txtToCliente(linha);
-	            		Cliente clienteBase = clienteService.obterCliente(cliente.getCpfCnpj());
-	            		if(clienteBase == null) {
-	            			clienteService.inserirCliente(cliente);
-	            		} else {
-	            			clienteService.atualizarCliente(clienteBase.getIdCliente(), cliente);
-	            		}
-	            		envio.setQtdeCarregada(envio.getQtdeCarregada() + 1);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+				importClientService.inserirClientes(inputStream, envio);
 			}
 			return new RetornoServico<Envio>(Codigo.SUCESSO, envio);
 		} catch (Exception e) {
