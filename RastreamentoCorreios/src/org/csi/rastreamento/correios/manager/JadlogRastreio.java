@@ -43,7 +43,6 @@ public class JadlogRastreio implements Rastreio {
 		Document doc = dBuilder.parse(is);
 		//get the root element
 		Element docEle = doc.getDocumentElement();
-		System.out.println(xml);
 
 		List<Evento> eventos = new ArrayList<Evento>();
 		NodeList trs = docEle.getElementsByTagName("Evento");

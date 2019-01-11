@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -564,7 +566,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public RetornoServico<List<Evento>> obterEventosEntrega(String codigo) {
+	public RetornoServico<Set<Evento>> obterEventosEntrega(String codigo) {
 		try {
 			Rastreio rastreio = RastreioFactory.getInstance(codigo);
 			if(rastreio == null) {
@@ -573,7 +575,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			Configuracao configWsdl = configuracaoService.obterConfiguracao(rastreio.getTokenWsdl()).getData();
 			Configuracao configUser = configuracaoService.obterConfiguracao(rastreio.getTokenUsuario()).getData();
 			Configuracao configPassword = configuracaoService.obterConfiguracao(rastreio.getTokenSenha()).getData();
-			List<Evento> eventos = rastreio.obterEventos(codigo, configUser.getValor(), configPassword.getValor(), configWsdl.getValor());
+			List<Evento> eventosList = rastreio.obterEventos(codigo, configUser.getValor(), configPassword.getValor(), configWsdl.getValor());
+			Set<Evento> eventos = new LinkedHashSet<>();
+			eventosList.forEach(e -> eventos.add(e));
 			for (Evento evento : eventos) {
 				if(evento.getDescricao().toUpperCase().contains("ENTREGUE")) {
 					Query query = em.createQuery("SELECT os FROM ReferenciaEntrega re JOIN re.enderecoEntrega ee JOIN ee.ordemServico os WHERE re.codigoReferencia = :codigoReferencia");
@@ -584,9 +588,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 					}
 				}
 			}
-			return new RetornoServico<List<Evento>>(Codigo.SUCESSO, eventos);
+			return new RetornoServico<Set<Evento>>(Codigo.SUCESSO, eventos);
 		} catch (Exception e) {
-			return new RetornoServico<List<Evento>>(Codigo.ERRO, e.getMessage());
+			return new RetornoServico<Set<Evento>>(Codigo.ERRO, e.getMessage());
 		}
 	}
 

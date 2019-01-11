@@ -1,6 +1,7 @@
 package org.csi.controle.servico;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Local;
 import javax.ws.rs.Consumes;
@@ -95,7 +96,7 @@ public interface OrdemServicoService {
 	@GET
 	@Path("/endereco/{codigo}")
 	@Produces("application/json")
-	RetornoServico<List<Evento>> obterEventosEntrega(@PathParam("codigo") String codigo);	
+	RetornoServico<Set<Evento>> obterEventosEntrega(@PathParam("codigo") String codigo);	
 	
 	@POST
 	@Path("/{id}/endereco")
