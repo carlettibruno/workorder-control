@@ -118,16 +118,20 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 		$scope.salvando = true;
 		$scope.ordemServico.previsaoEntrega = moment($scope.ordemServico.previsaoEntregaTxt, 'DD/MM/YYYY');
 		delete $scope.ordemServico.previsaoEntregaTxt;
-		angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
-			value.dataVencimento = moment(value.dataVencimentoTxt, 'DD/MM/YYYY');
-			delete value.dataVencimentoTxt;
-		});
+		if($scope.ordemServico.notaFiscal != null) {
+			angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
+				value.dataVencimento = moment(value.dataVencimentoTxt, 'DD/MM/YYYY');
+				delete value.dataVencimentoTxt;
+			});
+		}
 		var http = $http({url: 'services/ordemservico/' + $scope.ordemServico.idOrdemServico, data: $scope.ordemServico, method: "PUT", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
 		http.success(function (data, status, headers, config) {
 			$scope.ordemServico.previsaoEntregaTxt = $scope.ordemServico.previsaoEntrega.format('DD/MM/YYYY');
-			angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
-				value.dataVencimentoTxt = moment(value.dataVencimento).format('DD/MM/YYYY');
-			});			
+			if($scope.ordemServico.notaFiscal != null) {
+				angular.forEach($scope.ordemServico.notaFiscal.detalhesNota, function(value, key) {
+					value.dataVencimentoTxt = moment(value.dataVencimento).format('DD/MM/YYYY');
+				});
+			}
 			$scope.carregandoFotos = true;
 			$scope.verificaSalvamentoOs();
 			angular.forEach($scope.enderecos, function(value, key){

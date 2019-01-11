@@ -435,6 +435,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ServicoCtrl.js?v20181217"></script>
+<script src="js/ServicoCtrl.js?v20190111"></script>
 </body>
 </html>
