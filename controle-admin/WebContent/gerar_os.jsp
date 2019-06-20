@@ -38,6 +38,14 @@
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
 						<div class="control-group">
+							<label class="control-label" for="cliente">Vendedor</label>
+							<div class="controls">
+								<select ng-model="ordemServico.seller" ng-options="seller as seller.nome for seller in sellers">
+									<option value="">-- selecione o vendedor --</option>
+								</select>
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->						
+						<div class="control-group">
 							<label class="control-label" for="cliente">Cliente</label>
 							<div class="controls">
 								<input type="text" class="span3" readonly="readonly" id="cliente" ng-required="true" ng-model="ordemServico.cliente.nome"> <button href="#modalClientes" data-toggle="modal" class="btn" ng-click="abrirClientes()" type="button" title="Ver clientes"><i class="icon-list"></i></button>
@@ -218,6 +226,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/GerarOrdemServicoCtrl.js?v20181217"></script>
+<script src="js/GerarOrdemServicoCtrl.js?v20190620"></script>
 </body>
 </html>

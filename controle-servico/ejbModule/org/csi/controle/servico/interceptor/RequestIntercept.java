@@ -35,6 +35,8 @@ public class RequestIntercept implements ContainerRequestFilter {
 			return Modulo.ORDEM_SERVICO;
 		} else if(classe.startsWith("/envio")) {
 			return Modulo.ENVIO;
+		} else if(classe.startsWith("/sellers")) {
+			return Modulo.SELLER;
 		}
 		return null;
 	}

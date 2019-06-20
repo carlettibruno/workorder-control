@@ -67,7 +67,11 @@ public class OrdemServico implements EntidadeControlada {
 	@JsonIgnore
 	@OneToMany(mappedBy="ordemServico", fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
 	private List<EnderecoEntrega> enderecosEntrega;
-	
+
+	@ManyToOne
+	@JoinColumn(name="ID_SELLER", referencedColumnName="ID_SELLER")
+	private Seller seller;
+
 	@ManyToOne
 	@JoinColumn(name="ID_CLIENTE", referencedColumnName="ID_CLIENTE")
 	private Cliente cliente;
@@ -98,7 +102,7 @@ public class OrdemServico implements EntidadeControlada {
 	@Column(name="PREVISAO_ENTREGA")
 	private Date previsaoEntrega;
 
-	@Column(name="TEMPORARY")
+	@Column(name="TEMPORARY_ORDER")
 	private Boolean temporary;	
 	
 	@Transient
@@ -318,6 +322,14 @@ public class OrdemServico implements EntidadeControlada {
 
 	public void setTemporary(Boolean temporary) {
 		this.temporary = temporary;
+	}
+
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
 	}
 
 }

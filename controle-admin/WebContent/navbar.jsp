@@ -28,6 +28,7 @@
       	<li <%= request.getRequestURL().toString().contains("inicio.jsp") ? "class=\"active\"" : "" %>><a href="inicio.jsp"><i class="icon-home"></i><span>Home</span> </a> </li>
         <li ng-show="permissaoGerarOs.exibir" <%= request.getRequestURL().toString().contains("gerar_os.jsp") ? "class=\"active\"" : "" %>><a href="gerar_os.jsp"><i class="icon-print"></i><span>Gerar OS</span> </a> </li>
         <li ng-show="permissaoFuncionario.exibir" <%= request.getRequestURL().toString().contains("funcionarios.jsp") ? "class=\"active\"" : "" %>><a href="funcionarios.jsp"><i class="icon-user"></i><span>Funcion&aacute;rios</span> </a></li>
+        <li ng-show="permissaoSeller.exibir" <%= request.getRequestURL().toString().contains("sellers.jsp") ? "class=\"active\"" : "" %>><a href="sellers.jsp"><i class="fas fa-id-card-alt"></i><span>Vendedores</span> </a> </li>
         <li ng-show="permissaoCliente.exibir" <%= request.getRequestURL().toString().contains("clientes.jsp") ? "class=\"active\"" : "" %>><a href="clientes.jsp"><i class="icon-group"></i><span>Clientes</span> </a> </li>
         <li ng-show="permissaoServicos.exibir" <%= request.getRequestURL().toString().contains("servicos.jsp") ? "class=\"active\"" : "" %>><a href="servicos.jsp"><i class="icon-truck"></i><span>Servi&ccedil;os</span> </a> </li>
 		<li ng-show="permissaoEtapas.exibir" <%= request.getRequestURL().toString().contains("etapas.jsp") ? "class=\"active\"" : "" %>><a href="etapas.jsp"><i class="icon-qrcode"></i><span>Etapas</span> </a> </li>

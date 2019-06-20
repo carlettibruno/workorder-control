@@ -58,6 +58,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="span5">
+							<p>Vendedor <b>{{ordemServico.seller.nome}}</b></p>
 							<p>Cliente <b>{{ordemServico.cliente.nome}}</b></p>
 							<p>Email <b>{{ordemServico.email}}</b></p>
 							<p>N&uacute;mero da ordem de servi&ccedil;o <b>{{ordemServico.numero}}</b></p>
@@ -209,8 +210,8 @@
 					<img src="img/ajax-loader.gif" ng-show="salvando || carregandoFotos || carregandoEndereco">
 					<button class="btn btn-primary" type="button" ng-click="alterar(ordemServico)" ng-show="visualizar">Editar serviço</button>
 					<button class="btn btn-primary" type="button" ng-click="salvar(ordemServico)" ng-show="!visualizar" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Salvar</button>
-					<button class="btn" type="button" ng-click="imprimir(ordemServico)" ng-show="!ordemServico.temporary"><i class="shortcut-icon icon-print"></i></button>
 					<button class="btn" type="button" ng-click="ordemServico = null;" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Voltar</button>
+					<button class="btn" type="button" ng-click="imprimir(ordemServico)" ng-show="!ordemServico.temporary">&nbsp;<i class="shortcut-icon icon-print"></i>&nbsp;</button>
 
 					<span ng-show="salvando || carregandoFotos || carregandoEndereco || carregandoEtapa">Aguarde... </span>
 					<span ng-show="salvando && !carregandoEndereco && !carregandoEtapa && !carregandoFotos">Salvando OS.</span>
@@ -391,11 +392,11 @@
 					  <tr>
 					  	<th class="td-actions"> </th>
 						<th>OS</th>
+						<th>Vendedor</th>
 						<th>Cliente</th>
 						<th>Descri&ccedil;&atilde;o</th>
 						<th>Status</th>
 						<th>Data cria&ccedil;&atilde;o</th>
-						<th>Provisória</th>
 						<th class="td-actions"> </th>
 					  </tr>
 					</thead>
@@ -403,11 +404,11 @@
 					  <tr ng-repeat="os in ordensServico">
 					  	<td><a href="#" ng-click="visualizarOs(os)" class="shortcut" style="text-decoration: none;" title="Detalhes"><i class="shortcut-icon icon-search"></i></a></td>
 						<td>{{os.numero}}</td>
+						<td>{{os.seller.nome}}</td>
 						<td>{{os.cliente.nome}}</td>
 						<td>{{os.descricao}}</td>
 						<td>{{os.status}} ({{os.nomeEtapaAtual}})</td>
 						<td>{{os.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
-						<td><span ng-show="os.temporary">Sim</span><span ng-show="!os.temporary">Não</span></td>
 						<td>
 							<a href="#" ng-click="alterar(os)" class="shortcut" style="text-decoration: none;" title="Editar"><i class="shortcut-icon icon-edit"></i></a>
 							&nbsp;

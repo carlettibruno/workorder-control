@@ -9,6 +9,7 @@ function SessaoCtrl($scope, $http, $window) {
 	$scope.permissaoServicos = {modulo:"ORDEM_SERVICO"};
 	$scope.permissaoEtapas = {modulo:"ETAPA"};
 	$scope.permissaoConfiguracao = {modulo:"CONFIGURACAO"};
+	$scope.permissaoSeller = {modulo:"SELLER"};
 	
 	$scope.sair = function() {
 		var http = $http({url: 'services/login/logout?token='+$.cookie('token'), method: "DELETE", headers: {'Content-Type': 'application/json'}});
@@ -30,7 +31,8 @@ function SessaoCtrl($scope, $http, $window) {
         		$scope.popularPermissao($scope.permissaoGerarOs, value);
         		$scope.popularPermissao($scope.permissaoServicos, value);
         		$scope.popularPermissao($scope.permissaoEtapas, value);
-        		$scope.popularPermissao($scope.permissaoConfiguracao, value);
+				$scope.popularPermissao($scope.permissaoConfiguracao, value);
+				$scope.popularPermissao($scope.permissaoSeller, value);
             });			
 		});
 	};

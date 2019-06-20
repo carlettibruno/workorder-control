@@ -139,4 +139,23 @@ function GerarOrdemServicoCtrl($scope, $http, $upload) {
 	$scope.setUsarPlanilhaEndereco = function(usar) {
 		$scope.usarPlanilhaEndereco = usar;
 	};
+
+	$scope.findSellers = function() {
+		var http = $http({url: 'services/sellers', 
+			method: "GET", 
+			headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}, 
+			params: {'nocache': new Date().getTime()}
+		});
+		http.success(function (data, status, headers, config) {
+			$scope.sellers = data.data;
+        }).
+        error(function (data, status, headers, config){
+			alert(data);
+		});
+	};
+
+	$scope.onload = function() {
+		$scope.findSellers();
+	};
+	$scope.onload();
 }

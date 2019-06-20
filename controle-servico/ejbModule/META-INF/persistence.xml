@@ -27,12 +27,13 @@
 		<class>org.csi.controle.core.entidade.OrdemServico</class>
 		<class>org.csi.controle.core.entidade.Permissao</class>
 		<class>org.csi.controle.core.entidade.ReferenciaEntrega</class>
+		<class>org.csi.controle.core.entidade.Seller</class>
 		<class>org.csi.controle.core.entidade.Sessao</class>
 		<class>org.csi.controle.core.entidade.Usuario</class>
         <properties>
           	<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-<!-- 			<property name="hibernate.hbm2ddl.auto" value="update" /> -->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
         </properties>
     </persistence-unit>
 </persistence>
