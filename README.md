@@ -34,15 +34,20 @@ Main idea of this project is control a service
     - State
     - City
 - Service photos
+- Temporary service order
+    - Do not print when this is true
+    - Do not display this orders for customers
 
 Creation of service order will generate a terminal printer request. See more in *Thermal Printer* section.
 
 ### Employees
+### Sellers
 ### Customers
 ### Services order
 ### Flow steps
 ### Configuration
-### Thermal Printer
+### Customer App - *controle-cliente*
+### Thermal Printer - *controle-thermalprinter*
 Thermal Printer is a module that permit check all print requests and then, print the service order.
 
 This is a terminal app that you run to effectively print something.
@@ -71,4 +76,4 @@ service.password=yourpwd
 #### Run
 java -jar printer.jar
 
-### Shipping integration
+### Shipping integration - *RastreamentoCorreios*

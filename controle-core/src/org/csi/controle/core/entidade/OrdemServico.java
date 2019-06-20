@@ -97,6 +97,9 @@ public class OrdemServico implements EntidadeControlada {
 	
 	@Column(name="PREVISAO_ENTREGA")
 	private Date previsaoEntrega;
+
+	@Column(name="TEMPORARY_ORDER")
+	private Boolean temporaryOrder;	
 	
 	@Transient
 	private String diferencaDatas;
@@ -308,5 +311,13 @@ public class OrdemServico implements EntidadeControlada {
 	public void setPrevisaoEntrega(Date previsaoEntrega) {
 		this.previsaoEntrega = previsaoEntrega;
 	}
-	
+
+	public Boolean getTemporaryOrder() {
+		return temporaryOrder;
+	}
+
+	public void setTemporaryOrder(Boolean temporaryOrder) {
+		this.temporaryOrder = temporaryOrder;
+	}
+
 }

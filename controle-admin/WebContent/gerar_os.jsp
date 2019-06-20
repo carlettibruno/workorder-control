@@ -64,6 +64,13 @@
 								<p class="help-block">Data prevista de entrega para o cliente.</p>
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
+						<div class="control-group">
+							<label class="control-label" for="temporder">OS Provisória</label>
+							<div class="controls">
+                				<input type="checkbox" ng-model="ordemServico.temporaryOrder" id="temporder">
+								<p class="help-block">OS não será impressa e nem mostrada ao cliente.</p>
+							</div> <!-- /controls -->
+						</div> <!-- /control-group -->						
 					</div>
 
 					<div class="span4">

@@ -41,6 +41,7 @@ import org.csi.controle.servico.ConfiguracaoService;
 import org.csi.controle.servico.EtapaService;
 import org.csi.controle.servico.FilaImpressoraService;
 import org.csi.controle.servico.OrdemServicoService;
+import org.csi.controle.servico.SessionService;
 import org.csi.controle.servico.util.ConversorTxt;
 import org.csi.controle.servico.util.FileUtil;
 import org.csi.rastreamento.correios.entidade.Evento;
@@ -52,7 +53,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 @Stateless
 public class OrdemServicoServiceImpl implements OrdemServicoService {
 
-	@PersistenceContext(name="controlePU")
+	@PersistenceContext(name = "controlePU")
 	private EntityManager em;
 
 	@EJB
@@ -64,27 +65,42 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@EJB
 	private FilaImpressoraService filaImpressoraService;
 
+	@EJB
+	private SessionService sessionService;
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public RetornoServico<List<OrdemServico>> obterOrdensServico(Integer inicio, Integer qtdeRegistro, String token, String filtro) {
+	public RetornoServico<List<OrdemServico>> obterOrdensServico(Integer inicio, Integer qtdeRegistro, String token,
+			String filtro) {
 		try {
+			Sessao session = sessionService.findSession(token);
+			boolean customerAccess = session.getUsuario() instanceof ClienteAcesso;
+
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT o ");
 			sql.append("FROM OrdemServico o, Sessao s ");
 			sql.append("WHERE s.codigo = :token AND ");
 			sql.append("( ");
-			sql.append("(o.cliente.idCliente IN(SELECT c.idCliente FROM ClienteAcesso ca JOIN ca.clientes c, Sessao s WHERE s.codigo = :token AND s.usuario.idUsuario = ca.idUsuario) AND s.usuario.class = ClienteAcesso) OR ");
+			sql.append(
+					"(o.cliente.idCliente IN(SELECT c.idCliente FROM ClienteAcesso ca JOIN ca.clientes c, Sessao s WHERE s.codigo = :token AND s.usuario.idUsuario = ca.idUsuario) AND s.usuario.class = ClienteAcesso) OR ");
 			sql.append("s.usuario.class = Funcionario ");
 			sql.append(") ");
-			if(filtro != null && !filtro.isEmpty()) {
-				sql.append(" AND (o.numero like :filtro OR UPPER(o.descricao) like :filtro OR UPPER(o.cliente.nome) like :filtro ) ");
+			if (filtro != null && !filtro.isEmpty()) {
+				sql.append(
+						" AND (o.numero like :filtro OR UPPER(o.descricao) like :filtro OR UPPER(o.cliente.nome) like :filtro ) ");
+			}
+			if(customerAccess) {
+				sql.append(" AND (o.temporaryOrder IS NULL or o.temporaryOrder = :temporder) ");
 			}
 			sql.append("ORDER BY o.idOrdemServico DESC ");
 			Query query = em.createQuery(sql.toString());
 			query.setParameter("token", token);
-			if(filtro != null && !filtro.isEmpty()) {
+			if (filtro != null && !filtro.isEmpty()) {
 				query.setParameter("filtro", "%" + filtro.toUpperCase() + "%");
 			}
+			if(customerAccess) {
+				query.setParameter("temporder", false);
+			}			
 			query.setFirstResult(inicio);
 			query.setMaxResults(qtdeRegistro);
 			List<OrdemServico> ordensServico = query.getResultList();
@@ -103,8 +119,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public RetornoServico<Long> inserirOrdemServico(OrdemServico ordemServico, String token) {
 		try {
 			OrdemServico ordemServicoBase = obterOrdemServico(ordemServico.getNumero()).getData();
-			if(ordemServicoBase != null) {
-				return new RetornoServico<Long>(Codigo.ERRO, "Ordem de serviço existente: "+ordemServicoBase.getNumero());
+			if (ordemServicoBase != null) {
+				return new RetornoServico<Long>(Codigo.ERRO,
+						"Ordem de serviço existente:  " +ordemServicoBase.getNumero());
 			}
 			ordemServico.setAtivo(true);
 			ordemServico.setDataCriacao(new Date());
@@ -117,7 +134,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 			em.persist(ordemServico);
 			RetornoServico<Etapa> etapa = etapaService.obterEtapaInicial();
-			if(etapa.getData() != null) {
+			if (etapa.getData() != null) {
 				Historico historico = new Historico();
 				historico.setDataInicio(ordemServico.getDataCriacao());
 				historico.setEtapa(etapa.getData());
@@ -127,7 +144,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				ordemServico.setHistoricoAtual(historico);
 			}
 
-			filaImpressoraService.create(ordemServico.getNumero(), 2);
+			if (ordemServico.getTemporaryOrder() == null || !ordemServico.getTemporaryOrder()) {
+				filaImpressoraService.create(ordemServico.getNumero(), 2);
+			}
 
 			return new RetornoServico<Long>(Codigo.SUCESSO, ordemServico.getIdOrdemServico());
 		} catch (Exception e) {
@@ -198,13 +217,15 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			query.setParameter("codigo", token);
 			Sessao sessao = (Sessao) query.getSingleResult();
 			String mostrarAprovada = "";
-			if(sessao.getUsuario() instanceof ClienteAcesso) {
+			if (sessao.getUsuario() instanceof ClienteAcesso) {
 				mostrarAprovada = " AND f.aprovada = :aprovada ";
 			}
 
-			Query queryFoto = em.createQuery("SELECT f FROM Foto f WHERE f.ordemServico.idOrdemServico = :idOrdemServico "+mostrarAprovada+" ORDER BY f.idFoto");
+			Query queryFoto = em
+					.createQuery("SELECT f FROM Foto f WHERE f.ordemServico.idOrdemServico = :idOrdemServico "
+							+ mostrarAprovada + " ORDER BY f.idFoto");
 			queryFoto.setParameter("idOrdemServico", idOrdemServico);
-			if(!mostrarAprovada.isEmpty()) {
+			if (!mostrarAprovada.isEmpty()) {
 				queryFoto.setParameter("aprovada", true);
 			}
 			List<Foto> fotos = queryFoto.getResultList();
@@ -222,13 +243,15 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public RetornoServico<Long> inserirFoto(Long idOrdemServico, MultipartFormDataInput data) {
 		try {
 			RetornoServico<OrdemServico> retornoOs = obterOrdemServico(idOrdemServico);
-			if(retornoOs.getCodigo() != Codigo.SUCESSO) {
+			if (retornoOs.getCodigo() != Codigo.SUCESSO) {
 				throw new Exception(retornoOs.getMensagem());
 			}
 			OrdemServico ordemServico = retornoOs.getData();
-			boolean fotoAprovada = ordemServico.getCliente().getAprovacaoFoto() != null && !ordemServico.getCliente().getAprovacaoFoto();
+			boolean fotoAprovada = ordemServico.getCliente().getAprovacaoFoto() != null
+					&& !ordemServico.getCliente().getAprovacaoFoto();
 
-			Configuracao configRaiz = configuracaoService.obterConfiguracao(ChaveConfiguracao.RAIZ_FOTOS.ordinal()).getData();
+			Configuracao configRaiz = configuracaoService.obterConfiguracao(ChaveConfiguracao.RAIZ_FOTOS.ordinal())
+					.getData();
 
 			List<InputPart> parts = data.getParts();
 			Foto foto = null;
@@ -241,7 +264,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				foto.setOrdemServico(ordemServico);
 				foto.setNome(nome);
 				foto.setAprovada(fotoAprovada);
-				InputStream inputStream = part.getBody(InputStream.class,null);
+				InputStream inputStream = part.getBody(InputStream.class, null);
 				byte[] arquivo = IOUtils.toByteArray(inputStream);
 
 				String path = FileUtil.obterPathFoto(configRaiz.getValor(), nome);
@@ -253,25 +276,31 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				fos.write(arquivo);
 				fos.flush();
 				fos.close();
-				foto.setTamanho(Integer.parseInt(fileCompleto.length()+""));
-				FileUtil.redimensionarImagem(caminhoCompleto, FileUtil.obterCaminhoThumb(caminhoCompleto,FileUtil.TAMANHO_PEQUENO), FileUtil.TAMANHO_PEQUENO);
-				FileUtil.redimensionarImagem(caminhoCompleto, FileUtil.obterCaminhoThumb(caminhoCompleto,FileUtil.TAMANHO_NORMAL), FileUtil.TAMANHO_NORMAL);
+				foto.setTamanho(Integer.parseInt(fileCompleto.length() + ""));
+				FileUtil.redimensionarImagem(caminhoCompleto,
+						FileUtil.obterCaminhoThumb(caminhoCompleto, FileUtil.TAMANHO_PEQUENO),
+						FileUtil.TAMANHO_PEQUENO);
+				FileUtil.redimensionarImagem(caminhoCompleto,
+						FileUtil.obterCaminhoThumb(caminhoCompleto, FileUtil.TAMANHO_NORMAL), FileUtil.TAMANHO_NORMAL);
 
 				em.persist(foto);
-				if(ordemServico.getFoto() == null) {
+				if (ordemServico.getFoto() == null) {
 					ordemServico.setFoto(foto);
 				}
 
-//				RetornoServico<Configuracao> configuracao = configuracaoService.obterConfiguracao(ChaveConfiguracao.PERCENTO_PROTOCOLO.ordinal());
-//				Integer percento = Integer.parseInt(configuracao.getData().getValor());
-//				CheckProtocolo checkProtocolo = new CheckProtocolo();
-//				Double percentualImagem = checkProtocolo.percentualProtocolo(new File(caminhoCompleto));
-//				Double percentualImagem = checkProtocolo.percentualProtocolo(new File(caminhoCompleto));
-//				if(percentualImagem > percento) {
-//					encerrarPorEntrega(idOrdemServico, TipoEntrega.PARTICULAR.toString());
-//				}
+				// RetornoServico<Configuracao> configuracao =
+				// configuracaoService.obterConfiguracao(ChaveConfiguracao.PERCENTO_PROTOCOLO.ordinal());
+				// Integer percento = Integer.parseInt(configuracao.getData().getValor());
+				// CheckProtocolo checkProtocolo = new CheckProtocolo();
+				// Double percentualImagem = checkProtocolo.percentualProtocolo(new
+				// File(caminhoCompleto));
+				// Double percentualImagem = checkProtocolo.percentualProtocolo(new
+				// File(caminhoCompleto));
+				// if(percentualImagem > percento) {
+				// encerrarPorEntrega(idOrdemServico, TipoEntrega.PARTICULAR.toString());
+				// }
 			}
-			if(foto != null) {
+			if (foto != null) {
 				return new RetornoServico<Long>(Codigo.SUCESSO, foto.getId());
 			} else {
 				return new RetornoServico<Long>(Codigo.SUCESSO);
@@ -286,10 +315,10 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public RetornoServico<String> apagarFoto(Long idOrdemServico, Long idFoto) {
 		try {
 			Foto foto = em.find(Foto.class, idFoto);
-			if(foto.getOrdemServico().getFoto().equals(foto)) {
+			if (foto.getOrdemServico().getFoto().equals(foto)) {
 				foto.getOrdemServico().getFotos().remove(foto);
 				List<Foto> fotos = foto.getOrdemServico().getFotos();
-				if(fotos.isEmpty()) {
+				if (fotos.isEmpty()) {
 					foto.getOrdemServico().setFoto(null);
 				} else {
 					foto.getOrdemServico().setFoto(fotos.get(0));
@@ -307,7 +336,8 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@Override
 	public RetornoServico<List<Historico>> obterHistoricos(Long idOrdemServico) {
 		try {
-			Query query = em.createQuery("SELECT h FROM Historico h JOIN FETCH h.etapa WHERE h.ordemServico.idOrdemServico = :idOrdemServico ORDER BY h.idHistorico DESC");
+			Query query = em.createQuery(
+					"SELECT h FROM Historico h JOIN FETCH h.etapa WHERE h.ordemServico.idOrdemServico = :idOrdemServico ORDER BY h.idHistorico DESC");
 			query.setParameter("idOrdemServico", idOrdemServico);
 			List<Historico> historicos = query.getResultList();
 			for (Historico historico : historicos) {
@@ -326,14 +356,15 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 		try {
 			OrdemServico ordemServico = em.find(OrdemServico.class, idOrdemServico);
 			Historico historico = new Historico();
-			if(ordemServico.getHistoricoAtual() != null) {
-				if(idEtapa != null && ordemServico.getHistoricoAtual().getEtapa().getId().intValue() == idEtapa.intValue()) {
+			if (ordemServico.getHistoricoAtual() != null) {
+				if (idEtapa != null
+						&& ordemServico.getHistoricoAtual().getEtapa().getId().intValue() == idEtapa.intValue()) {
 					return new RetornoServico<String>(Codigo.SUCESSO);
 				}
 				ordemServico.getHistoricoAtual().setDataFim(new Date());
 				ordemServico.getHistoricoAtual().setStatus(Status.CONCLUIDO);
 			}
-			if(idEtapa != null) {
+			if (idEtapa != null) {
 				ordemServico.getHistoricoAtual().setProximo(historico);
 				Etapa etapa = em.find(Etapa.class, idEtapa);
 				historico.setDataInicio(new Date());
@@ -355,7 +386,8 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@Override
 	public RetornoServico<List<EnderecoEntrega>> obterEnderecos(Long idOrdemServico) {
 		try {
-			Query query = em.createQuery("SELECT ee FROM EnderecoEntrega ee WHERE ee.ordemServico.idOrdemServico = :idOrdemServico");
+			Query query = em.createQuery(
+					"SELECT ee FROM EnderecoEntrega ee WHERE ee.ordemServico.idOrdemServico = :idOrdemServico");
 			query.setParameter("idOrdemServico", idOrdemServico);
 			List<EnderecoEntrega> enderecosEntrega = query.getResultList();
 			return new RetornoServico<List<EnderecoEntrega>>(Codigo.SUCESSO, enderecosEntrega);
@@ -394,16 +426,17 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 	@Override
 	public Foto atualizarCaminhoCompleto(Foto foto) {
-		String caminhoBase = configuracaoService.obterConfiguracao(ChaveConfiguracao.CAMINHO_BASE.ordinal()).getData().getValor();
-		if(foto == null || foto.getCaminho() == null) {
+		String caminhoBase = configuracaoService.obterConfiguracao(ChaveConfiguracao.CAMINHO_BASE.ordinal()).getData()
+				.getValor();
+		if (foto == null || foto.getCaminho() == null) {
 			String caminhoCompleto = caminhoBase + "img/semimagem.jpg";
 			foto = new Foto();
 			foto.setCaminhoCompletoThumb(caminhoCompleto);
 			return foto;
 		} else {
 			String caminhoCompleto = caminhoBase + "foto/" + foto.getCaminho();
-			foto.setCaminhoCompleto(FileUtil.obterCaminhoThumbWeb(caminhoCompleto,FileUtil.TAMANHO_NORMAL));
-			foto.setCaminhoCompletoThumb(FileUtil.obterCaminhoThumbWeb(caminhoCompleto,FileUtil.TAMANHO_PEQUENO));
+			foto.setCaminhoCompleto(FileUtil.obterCaminhoThumbWeb(caminhoCompleto, FileUtil.TAMANHO_NORMAL));
+			foto.setCaminhoCompletoThumb(FileUtil.obterCaminhoThumbWeb(caminhoCompleto, FileUtil.TAMANHO_PEQUENO));
 			return foto;
 		}
 	}
@@ -415,7 +448,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			Query query = em.createQuery("SELECT os FROM OrdemServico os WHERE os.numero = :numero");
 			query.setParameter("numero", codigoOs);
 			List<OrdemServico> os = query.getResultList();
-			if(os.isEmpty()) {
+			if (os.isEmpty()) {
 				return new RetornoServico<OrdemServico>(Codigo.SUCESSO);
 			}
 			return new RetornoServico<OrdemServico>(Codigo.SUCESSO, os.get(0));
@@ -431,14 +464,14 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			OrdemServico ordemServico = em.find(OrdemServico.class, idOrdemServico);
 			List<InputPart> parts = data.getParts();
 			for (InputPart part : parts) {
-				InputStream inputStream = part.getBody(InputStream.class,null);
+				InputStream inputStream = part.getBody(InputStream.class, null);
 				ConversorTxt conversor = new ConversorTxt();
 				List<Endereco> enderecos = conversor.planilhaToEndereco(inputStream);
 				for (Endereco endereco : enderecos) {
-	    			EnderecoEntrega enderecoEntrega = new EnderecoEntrega(endereco);
-	    			enderecoEntrega.setOrdemServico(ordemServico);
-	    			enderecoEntrega.setStatus(Status.PENDENTE);
-	    			em.persist(enderecoEntrega);
+					EnderecoEntrega enderecoEntrega = new EnderecoEntrega(endereco);
+					enderecoEntrega.setOrdemServico(ordemServico);
+					enderecoEntrega.setStatus(Status.PENDENTE);
+					em.persist(enderecoEntrega);
 				}
 			}
 
@@ -451,40 +484,41 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
 	private void atualizarRetornoOrdemServico(OrdemServico ordemServico) {
 		String diffData = "";
-		if(ordemServico.getStatus().equals(Status.CONCLUIDO) && ordemServico.getHistoricoAtual() != null) {
-			diffData = DadosUtil.formatarDiffData(ordemServico.getDataCriacao(), ordemServico.getHistoricoAtual().getDataFim());
+		if (ordemServico.getStatus().equals(Status.CONCLUIDO) && ordemServico.getHistoricoAtual() != null) {
+			diffData = DadosUtil.formatarDiffData(ordemServico.getDataCriacao(),
+					ordemServico.getHistoricoAtual().getDataFim());
 		} else {
 			diffData = DadosUtil.formatarDiffData(ordemServico.getDataCriacao(), new Date());
 		}
-		if(ordemServico.getHistoricoAtual() != null) {
+		if (ordemServico.getHistoricoAtual() != null) {
 			ordemServico.setNomeEtapaAtual(ordemServico.getHistoricoAtual().getEtapa().getNome());
 		}
 		ordemServico.setDiferencaDatas(diffData);
 
-		if(ordemServico.getFoto() == null) {
+		if (ordemServico.getFoto() == null) {
 			Foto foto = atualizarCaminhoCompleto(ordemServico.getFoto());
 			ordemServico.setFoto(foto);
 		} else {
 			atualizarCaminhoCompleto(ordemServico.getFoto());
 		}
 
-		if(ordemServico.getNotaFiscal() != null) {
+		if (ordemServico.getNotaFiscal() != null) {
 			ordemServico.getNotaFiscal().setDetalhesNota(null);
 		}
 	}
 
 	@Override
 	public RetornoServico<String> atualizarNotaFiscal(Long idOrdemServico, NotaFiscal notaFiscal) {
-		if(notaFiscal == null) {
+		if (notaFiscal == null) {
 			return new RetornoServico<String>(Codigo.ALERTA, "notaFiscal == null", null);
 		}
 		OrdemServico ordemServicoBase = em.find(OrdemServico.class, idOrdemServico);
-		if(ordemServicoBase == null) {
+		if (ordemServicoBase == null) {
 			return new RetornoServico<String>(Codigo.ALERTA, "ordemServicoBase == null", null);
 		}
 		ordemServicoBase.setDataModificacao(new Date());
 
-		if(ordemServicoBase.getNotaFiscal() == null) {
+		if (ordemServicoBase.getNotaFiscal() == null) {
 			em.persist(notaFiscal);
 			ordemServicoBase.setNotaFiscal(notaFiscal);
 		} else {
@@ -492,12 +526,12 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServicoBase.getNotaFiscal().setValor(notaFiscal.getValor());
 			ordemServicoBase.getNotaFiscal().setPaga(notaFiscal.getPaga());
 			em.merge(ordemServicoBase.getNotaFiscal());
-			
+
 			List<DetalheNota> detalhesNotaBase = ordemServicoBase.getNotaFiscal().getDetalhesNota();
-			if(detalhesNotaBase == null) {
+			if (detalhesNotaBase == null) {
 				detalhesNotaBase = new ArrayList<DetalheNota>();
 			}
-			
+
 			for (DetalheNota detalheNotaBase : detalhesNotaBase) {
 				boolean existsInvoice = false;
 				for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
@@ -508,12 +542,12 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				}
 				if (!existsInvoice) {
 					em.remove(detalheNotaBase);
-				}			
-			}			
+				}
+			}
 
 			for (DetalheNota detalheNota : notaFiscal.getDetalhesNota()) {
 				detalheNota.setNotaFiscal(ordemServicoBase.getNotaFiscal());
-				if(detalheNota.getIdDetalheNota() == null) {
+				if (detalheNota.getIdDetalheNota() == null) {
 					detalhesNotaBase.add(detalheNota);
 					em.persist(detalheNota);
 				} else {
@@ -541,7 +575,8 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	@Override
 	public RetornoServico<List<DetalheNota>> obterDetalhesNota(Long idNotaFiscal) {
 		try {
-			Query query = em.createQuery("SELECT dn FROM DetalheNota dn WHERE dn.notaFiscal.idNotaFiscal = :idNotaFiscal");
+			Query query = em
+					.createQuery("SELECT dn FROM DetalheNota dn WHERE dn.notaFiscal.idNotaFiscal = :idNotaFiscal");
 			query.setParameter("idNotaFiscal", idNotaFiscal);
 			List<DetalheNota> detalhesNota = query.getResultList();
 			return new RetornoServico<List<DetalheNota>>(Codigo.SUCESSO, detalhesNota);
@@ -569,18 +604,20 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public RetornoServico<Set<Evento>> obterEventosEntrega(String codigo) {
 		try {
 			Rastreio rastreio = RastreioFactory.getInstance(codigo);
-			if(rastreio == null) {
+			if (rastreio == null) {
 				return new RetornoServico<>();
 			}
 			Configuracao configWsdl = configuracaoService.obterConfiguracao(rastreio.getTokenWsdl()).getData();
 			Configuracao configUser = configuracaoService.obterConfiguracao(rastreio.getTokenUsuario()).getData();
 			Configuracao configPassword = configuracaoService.obterConfiguracao(rastreio.getTokenSenha()).getData();
-			List<Evento> eventosList = rastreio.obterEventos(codigo, configUser.getValor(), configPassword.getValor(), configWsdl.getValor());
+			List<Evento> eventosList = rastreio.obterEventos(codigo, configUser.getValor(), configPassword.getValor(),
+					configWsdl.getValor());
 			Set<Evento> eventos = new LinkedHashSet<>();
 			eventosList.forEach(e -> eventos.add(e));
 			for (Evento evento : eventos) {
-				if(evento.getDescricao().toUpperCase().contains("ENTREGUE")) {
-					Query query = em.createQuery("SELECT os FROM ReferenciaEntrega re JOIN re.enderecoEntrega ee JOIN ee.ordemServico os WHERE re.codigoReferencia = :codigoReferencia");
+				if (evento.getDescricao().toUpperCase().contains("ENTREGUE")) {
+					Query query = em.createQuery(
+							"SELECT os FROM ReferenciaEntrega re JOIN re.enderecoEntrega ee JOIN ee.ordemServico os WHERE re.codigoReferencia = :codigoReferencia");
 					query.setParameter("codigoReferencia", codigo);
 					List<OrdemServico> ordensServico = query.getResultList();
 					for (OrdemServico ordemServico : ordensServico) {
@@ -597,7 +634,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 	public void encerrarPorEntrega(Long idOrdemServico, String codigoReferencia) {
 		OrdemServico ordemServico = em.find(OrdemServico.class, idOrdemServico);
 
-		if(ordemServico.getStatus().equals(Status.CONCLUIDO)) {
+		if (ordemServico.getStatus().equals(Status.CONCLUIDO)) {
 			return;
 		}
 		List<EnderecoEntrega> enderecosEntrega = ordemServico.getEnderecosEntrega();
@@ -607,28 +644,30 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			concluida = !referenciasEntrega.isEmpty() && concluida;
 			boolean enderecoConcluido = true;
 			for (ReferenciaEntrega referenciaEntrega : referenciasEntrega) {
-				if((referenciaEntrega.getStatus() == null || !referenciaEntrega.getStatus().equals(Status.CONCLUIDO)) && !referenciaEntrega.getCodigoReferencia().equalsIgnoreCase(codigoReferencia)) {
+				if ((referenciaEntrega.getStatus() == null || !referenciaEntrega.getStatus().equals(Status.CONCLUIDO))
+						&& !referenciaEntrega.getCodigoReferencia().equalsIgnoreCase(codigoReferencia)) {
 					concluida = false;
 					enderecoConcluido = false;
-				} else if(referenciaEntrega.getCodigoReferencia().equalsIgnoreCase(codigoReferencia)) {
+				} else if (referenciaEntrega.getCodigoReferencia().equalsIgnoreCase(codigoReferencia)) {
 					referenciaEntrega.setStatus(Status.CONCLUIDO);
 				}
 			}
-			if(enderecoConcluido && !referenciasEntrega.isEmpty()) {
+			if (enderecoConcluido && !referenciasEntrega.isEmpty()) {
 				enderecoEntrega.setStatus(Status.CONCLUIDO);
 			}
 		}
 
-		if(concluida) {
+		if (concluida) {
 			alterarStatus(ordemServico.getId(), null);
 			ordemServico.setStatus(Status.CONCLUIDO);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	@Schedule(minute="0", second="0")
+	@Schedule(minute = "0", second = "0")
 	public void sincronizarReferenciaEntrega() {
-		Query query = em.createQuery("SELECT re FROM ReferenciaEntrega re WHERE re.tipoEntrega IN(:tipoEntrega) AND re.status <> :status");
+		Query query = em.createQuery(
+				"SELECT re FROM ReferenciaEntrega re WHERE re.tipoEntrega IN(:tipoEntrega) AND re.status <> :status");
 		List<TipoEntrega> tiposEntrega = new ArrayList<>();
 		tiposEntrega.add(TipoEntrega.CORREIOS);
 		tiposEntrega.add(TipoEntrega.JADLOG);
