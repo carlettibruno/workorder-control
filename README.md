@@ -1,6 +1,6 @@
 # WorkOrder-Control
 
-This project has a goal to control a work order of a company.
+This project has a goal to control a service order of a company.
 
 ---
 
