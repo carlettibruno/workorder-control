@@ -59,12 +59,14 @@ This is a terminal app that you run to effectively print something.
 - **service.password**: user password
 
 ##### Configuration sample
+```
 impressora.ip=192.168.1.100
 impressora.tempo.espera=4000
 service.getinfoprint.url=http://youraddress/contextpath/services/filaimpressora
 service.url=http://youraddress/contextpath/services/login
 service.user=youruser
 service.password=yourpwd
+```
 
 #### Run
 java -jar printer.jar
