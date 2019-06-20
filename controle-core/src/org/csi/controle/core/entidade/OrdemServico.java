@@ -17,12 +17,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.csi.controle.core.serialize.StatusDeserialize;
-import org.csi.controle.core.serialize.StatusSerialize;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import org.csi.controle.core.serialize.StatusDeserialize;
+import org.csi.controle.core.serialize.StatusSerialize;
 
 @Entity
 @Table(name="ORDEM_SERVICO")
@@ -98,8 +98,8 @@ public class OrdemServico implements EntidadeControlada {
 	@Column(name="PREVISAO_ENTREGA")
 	private Date previsaoEntrega;
 
-	@Column(name="TEMPORARY_ORDER")
-	private Boolean temporaryOrder;	
+	@Column(name="TEMPORARY")
+	private Boolean temporary;	
 	
 	@Transient
 	private String diferencaDatas;
@@ -312,12 +312,12 @@ public class OrdemServico implements EntidadeControlada {
 		this.previsaoEntrega = previsaoEntrega;
 	}
 
-	public Boolean getTemporaryOrder() {
-		return temporaryOrder;
+	public Boolean getTemporary() {
+		return temporary;
 	}
 
-	public void setTemporaryOrder(Boolean temporaryOrder) {
-		this.temporaryOrder = temporaryOrder;
+	public void setTemporary(Boolean temporary) {
+		this.temporary = temporary;
 	}
 
 }

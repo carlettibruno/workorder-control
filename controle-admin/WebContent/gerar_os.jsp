@@ -65,9 +65,9 @@
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->
 						<div class="control-group">
-							<label class="control-label" for="temporder">OS Provisória</label>
+							<label class="control-label" for="temporary">OS Provisória</label>
 							<div class="controls">
-                				<input type="checkbox" ng-model="ordemServico.temporaryOrder" id="temporder">
+                				<input type="checkbox" ng-model="ordemServico.temporary" id="temporary">
 								<p class="help-block">OS não será impressa e nem mostrada ao cliente.</p>
 							</div> <!-- /controls -->
 						</div> <!-- /control-group -->						

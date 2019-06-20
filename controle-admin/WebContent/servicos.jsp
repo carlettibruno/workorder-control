@@ -63,6 +63,7 @@
 							<p>N&uacute;mero da ordem de servi&ccedil;o <b>{{ordemServico.numero}}</b></p>
 							<p ng-show="visualizar">Descri&ccedil;&atilde;o do servi&ccedil;o <b>{{ordemServico.descricao}}</b></p>
 							<p ng-show="visualizar">Previsão de entrega <b>{{ordemServico.previsaoEntrega | date : 'dd/MM/yyyy'}}</b></p>
+							<p ng-show="visualizar">OS provisória <b><span ng-show="ordemServico.temporary">Sim</span><span ng-show="!ordemServico.temporary">Não</span></b></p>
 
 							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="descricao">Descri&ccedil;&atilde;o do servi&ccedil;o</label>
@@ -393,6 +394,7 @@
 						<th>Descri&ccedil;&atilde;o</th>
 						<th>Status</th>
 						<th>Data cria&ccedil;&atilde;o</th>
+						<th>Provisória</th>
 						<th class="td-actions"> </th>
 					  </tr>
 					</thead>
@@ -404,6 +406,7 @@
 						<td>{{os.descricao}}</td>
 						<td>{{os.status}} ({{os.nomeEtapaAtual}})</td>
 						<td>{{os.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+						<td>{{os.temporary}}</td>
 						<td>
 							<a href="#" ng-click="alterar(os)" class="shortcut" style="text-decoration: none;" title="Editar"><i class="shortcut-icon icon-edit"></i></a>
 							&nbsp;

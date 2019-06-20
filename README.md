@@ -12,6 +12,10 @@ Main idea of this project is control a service
 - jQuery
 - HTML
 - CSS
+- Wildfly 10
+
+## How to run?
+```mvn wildfly:redeploy -Pprd -Dserver={serveraddress} -Dport={serverport} -Dusername={usermanager} -Dpassword={passwordmanager}```
 
 ## Features
 

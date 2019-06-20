@@ -144,7 +144,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				ordemServico.setHistoricoAtual(historico);
 			}
 
-			if (ordemServico.getTemporaryOrder() == null || !ordemServico.getTemporaryOrder()) {
+			if (ordemServico.getTemporary() == null || !ordemServico.getTemporary()) {
 				filaImpressoraService.create(ordemServico.getNumero(), 2);
 			}
 
