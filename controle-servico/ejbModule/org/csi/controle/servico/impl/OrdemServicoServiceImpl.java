@@ -34,6 +34,7 @@ import org.csi.controle.core.entidade.ReferenciaEntrega;
 import org.csi.controle.core.entidade.Sessao;
 import org.csi.controle.core.entidade.Status;
 import org.csi.controle.core.entidade.TipoEntrega;
+import org.csi.controle.core.to.PrintDTO;
 import org.csi.controle.core.util.Codigo;
 import org.csi.controle.core.util.DadosUtil;
 import org.csi.controle.core.util.RetornoServico;
@@ -89,7 +90,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				sql.append(
 						" AND (o.numero like :filtro OR UPPER(o.descricao) like :filtro OR UPPER(o.cliente.nome) like :filtro ) ");
 			}
-			if(customerAccess) {
+			if (customerAccess) {
 				sql.append(" AND (o.temporaryOrder IS NULL or o.temporaryOrder = :temporder) ");
 			}
 			sql.append("ORDER BY o.idOrdemServico DESC ");
@@ -98,9 +99,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			if (filtro != null && !filtro.isEmpty()) {
 				query.setParameter("filtro", "%" + filtro.toUpperCase() + "%");
 			}
-			if(customerAccess) {
+			if (customerAccess) {
 				query.setParameter("temporder", false);
-			}			
+			}
 			query.setFirstResult(inicio);
 			query.setMaxResults(qtdeRegistro);
 			List<OrdemServico> ordensServico = query.getResultList();
@@ -121,7 +122,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			OrdemServico ordemServicoBase = obterOrdemServico(ordemServico.getNumero()).getData();
 			if (ordemServicoBase != null) {
 				return new RetornoServico<Long>(Codigo.ERRO,
-						"Ordem de serviço existente:  " +ordemServicoBase.getNumero());
+						"Ordem de serviço existente:  " + ordemServicoBase.getNumero());
 			}
 			ordemServico.setAtivo(true);
 			ordemServico.setDataCriacao(new Date());
@@ -144,15 +145,22 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				ordemServico.setHistoricoAtual(historico);
 			}
 
-			if (ordemServico.getTemporary() == null || !ordemServico.getTemporary()) {
-				filaImpressoraService.create(ordemServico.getNumero(), 2);
-			}
-
+			imprimirOrdemServico(new PrintDTO(ordemServico.getId(), 2));
+			
 			return new RetornoServico<Long>(Codigo.SUCESSO, ordemServico.getIdOrdemServico());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new RetornoServico<Long>(Codigo.ERRO, e.getMessage());
 		}
+	}
+
+	public RetornoServico<Void> imprimirOrdemServico(PrintDTO print) {
+		OrdemServico ordemServico = obterOrdemServico(print.getIdOrdemServico()).getData();
+		if (ordemServico.getTemporary() == null || !ordemServico.getTemporary()) {
+			filaImpressoraService.create(ordemServico.getNumero(), print.getQty());
+			return new RetornoServico<>(Codigo.SUCESSO);
+		}
+		return new RetornoServico<>(Codigo.ERRO, "OS_PROVISORIA");
 	}
 
 	@Override

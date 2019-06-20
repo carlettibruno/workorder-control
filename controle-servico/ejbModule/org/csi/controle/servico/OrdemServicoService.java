@@ -22,6 +22,7 @@ import org.csi.controle.core.entidade.Foto;
 import org.csi.controle.core.entidade.Historico;
 import org.csi.controle.core.entidade.NotaFiscal;
 import org.csi.controle.core.entidade.OrdemServico;
+import org.csi.controle.core.to.PrintDTO;
 import org.csi.controle.core.util.RetornoServico;
 import org.csi.rastreamento.correios.entidade.Evento;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -33,7 +34,9 @@ public interface OrdemServicoService {
 	@GET
 	@Path("/")
 	@Produces("application/json")
-	RetornoServico<List<OrdemServico>> obterOrdensServico(@QueryParam("inicio") Integer inicio, @QueryParam("qtderegistro") Integer qtdeRegistro, @HeaderParam("token") String token, @QueryParam("filtro") String filtro);
+	RetornoServico<List<OrdemServico>> obterOrdensServico(@QueryParam("inicio") Integer inicio,
+			@QueryParam("qtderegistro") Integer qtdeRegistro, @HeaderParam("token") String token,
+			@QueryParam("filtro") String filtro);
 
 	@POST
 	@Path("/")
@@ -45,13 +48,13 @@ public interface OrdemServicoService {
 	@Path("/{id}")
 	@Produces("application/json")
 	RetornoServico<OrdemServico> obterOrdemServico(@PathParam("id") Long idOrdemServico);
-	
+
 	@PUT
 	@Path("/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
 	RetornoServico<String> atualizarOrdemServico(@PathParam("id") Long idOrdemServico, OrdemServico ordemServico);
-	
+
 	@DELETE
 	@Path("/{id}")
 	@Produces("application/json")
@@ -61,11 +64,12 @@ public interface OrdemServicoService {
 	@Path("/{id}/foto")
 	@Produces("application/json")
 	RetornoServico<List<Foto>> obterFotos(@PathParam("id") Long idOrdemServico, @HeaderParam("token") String token);
-	
+
 	@PUT
 	@Path("/{id}/foto/{idFoto}")
 	@Produces("application/json")
-	RetornoServico<String> aprovarFoto(@PathParam("id") Long idOrdemServico, @PathParam("idFoto") Long idFoto, @QueryParam("aprova") Boolean aprova);	
+	RetornoServico<String> aprovarFoto(@PathParam("id") Long idOrdemServico, @PathParam("idFoto") Long idFoto,
+			@QueryParam("aprova") Boolean aprova);
 
 	@POST
 	@Path("/{id}/foto")
@@ -76,34 +80,35 @@ public interface OrdemServicoService {
 	@DELETE
 	@Path("/{id}/foto/{idFoto}")
 	@Produces("application/json")
-	RetornoServico<String> apagarFoto(@PathParam("id") Long idOrdemServico, @PathParam("idFoto") Long idFoto);	
-	
+	RetornoServico<String> apagarFoto(@PathParam("id") Long idOrdemServico, @PathParam("idFoto") Long idFoto);
+
 	@GET
 	@Path("/{id}/historico")
 	@Produces("application/json")
 	RetornoServico<List<Historico>> obterHistoricos(@PathParam("id") Long idOrdemServico);
-	
+
 	@POST
 	@Path("/{id}/historico")
 	@Produces("application/json")
-	RetornoServico<String> alterarStatus(@PathParam("id") Long idOrdemServico, @QueryParam("proximoIdEtapa") Integer idEtapa);	
+	RetornoServico<String> alterarStatus(@PathParam("id") Long idOrdemServico,
+			@QueryParam("proximoIdEtapa") Integer idEtapa);
 
 	@GET
 	@Path("/{id}/endereco")
 	@Produces("application/json")
 	RetornoServico<List<EnderecoEntrega>> obterEnderecos(@PathParam("id") Long idOrdemServico);
-	
+
 	@GET
 	@Path("/endereco/{codigo}")
 	@Produces("application/json")
-	RetornoServico<Set<Evento>> obterEventosEntrega(@PathParam("codigo") String codigo);	
-	
+	RetornoServico<Set<Evento>> obterEventosEntrega(@PathParam("codigo") String codigo);
+
 	@POST
 	@Path("/{id}/endereco")
 	@Produces("application/json")
 	@Consumes("application/json")
 	RetornoServico<String> inserirEnderecoEntrega(@PathParam("id") Long idOrdemServico, Endereco endereco);
-	
+
 	@POST
 	@Path("/{id}/enderecos")
 	@Produces("application/json")
@@ -113,16 +118,18 @@ public interface OrdemServicoService {
 	@POST
 	@Path("/endereco/{idEnderecoEntrega}/referencia")
 	@Produces("application/json")
-//	@Consumes("multipart/form-data")
-	RetornoServico<String> inserirReferenciaEntrega(@PathParam("idEnderecoEntrega") Long idEnderecoEntrega, String codigoReferencia);
+	// @Consumes("multipart/form-data")
+	RetornoServico<String> inserirReferenciaEntrega(@PathParam("idEnderecoEntrega") Long idEnderecoEntrega,
+			String codigoReferencia);
 
 	@DELETE
 	@Path("/{id}/endereco/{idEndereco}")
 	@Produces("application/json")
-	RetornoServico<String> apagarEnderecoEntrega(@PathParam("id") Long idOrdemServico, @PathParam("idEndereco") Long idEndereco);
-	
+	RetornoServico<String> apagarEnderecoEntrega(@PathParam("id") Long idOrdemServico,
+			@PathParam("idEndereco") Long idEndereco);
+
 	Foto atualizarCaminhoCompleto(Foto foto);
-	
+
 	RetornoServico<OrdemServico> obterOrdemServico(String codigoOs);
 
 	@PUT
@@ -134,7 +141,12 @@ public interface OrdemServicoService {
 	RetornoServico<List<DetalheNota>> obterDetalhesNota(@PathParam("idNotaFiscal") Long idNotaFiscal);
 
 	void encerrarPorEntrega(Long idOrdemServico, String codigoReferencia);
-	
+
 	void sincronizarReferenciaEntrega();
-	
+
+	@POST
+	@Path("/imprimir")
+	@Consumes("application/json")
+	RetornoServico<Void> imprimirOrdemServico(PrintDTO print);
+
 }

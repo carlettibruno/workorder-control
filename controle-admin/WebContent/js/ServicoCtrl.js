@@ -223,7 +223,7 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 	};
 
 	$scope.apagar = function(ordemServico) {
-		if(window.confirm("Deseja inativar a OS \""+ordemServico.numero+"\"?")) {
+		if(window.confirm("Deseja INATIVAR a OS \""+ordemServico.numero+"\"?")) {
 			$scope.carregando = true;
 			var http = $http({url: 'services/ordemservico/'+ordemServico.idOrdemServico, method: "DELETE", headers: {'Content-Type': 'application/json', 'token': $.cookie('token')}});
 			http.success(function (data, status, headers, config) {
@@ -240,6 +240,26 @@ function ServicoCtrl($scope, $http, $upload, $interval, $timeout) {
 	        	$scope.carregando = false;
 	        	alert(data);
 //				$scope.retorno = {codigo:1,mensagem:data};
+			});
+		}
+	};
+
+	$scope.imprimir = function(ordemServico) {
+		if(window.confirm("Deseja REIMPRIMIR a OS \""+ordemServico.numero+"\"?")) {
+			$scope.carregando = true;
+			var http = $http({
+				url: 'services/ordemservico/imprimir', 
+				method: "POST", 
+				headers: {'Content-Type': 'application/json', 'token': $.cookie('token')},
+				data: {'idOrdemServico':ordemServico.id,'qty':1}
+			});
+			http.success(function (data, status, headers, config) {
+				$scope.carregando = false;
+	            alert("OS \""+ordemServico.numero+"\" enviada para impressão");
+	        }).
+	        error(function (data, status, headers, config){
+	        	$scope.carregando = false;
+	        	alert(data);
 			});
 		}
 	};

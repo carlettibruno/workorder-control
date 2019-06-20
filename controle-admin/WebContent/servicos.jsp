@@ -209,6 +209,7 @@
 					<img src="img/ajax-loader.gif" ng-show="salvando || carregandoFotos || carregandoEndereco">
 					<button class="btn btn-primary" type="button" ng-click="alterar(ordemServico)" ng-show="visualizar">Editar serviço</button>
 					<button class="btn btn-primary" type="button" ng-click="salvar(ordemServico)" ng-show="!visualizar" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Salvar</button>
+					<button class="btn" type="button" ng-click="imprimir(ordemServico)" ng-show="!ordemServico.temporary"><i class="shortcut-icon icon-print"></i></button>
 					<button class="btn" type="button" ng-click="ordemServico = null;" ng-disabled="salvando || carregandoFotos || carregandoEndereco">Voltar</button>
 
 					<span ng-show="salvando || carregandoFotos || carregandoEndereco || carregandoEtapa">Aguarde... </span>
@@ -411,6 +412,8 @@
 							<a href="#" ng-click="alterar(os)" class="shortcut" style="text-decoration: none;" title="Editar"><i class="shortcut-icon icon-edit"></i></a>
 							&nbsp;
 							<a href="#" ng-click="apagar(os)" class="shortcut" style="text-decoration: none;" title="Inativar"><i class="shortcut-icon icon-remove-sign"></i></a>
+							&nbsp;
+							<a href="#" ng-show="!os.temporary" ng-click="imprimir(os)" class="shortcut" style="text-decoration: none;" title="Imprimir"><i class="shortcut-icon icon-print"></i></a>							
 						</td>
 					  </tr>
 					</tbody>
@@ -438,6 +441,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <jsp:include page="scripts.jsp"></jsp:include>
-<script src="js/ServicoCtrl.js?v20190111"></script>
+<script src="js/ServicoCtrl.js?v20190620"></script>
 </body>
 </html>
