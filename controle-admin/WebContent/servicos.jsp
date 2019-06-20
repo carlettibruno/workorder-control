@@ -61,9 +61,9 @@
 							<p>Cliente <b>{{ordemServico.cliente.nome}}</b></p>
 							<p>Email <b>{{ordemServico.email}}</b></p>
 							<p>N&uacute;mero da ordem de servi&ccedil;o <b>{{ordemServico.numero}}</b></p>
+							<p >OS provisória <b><span ng-show="ordemServico.temporary">Sim</span><span ng-show="!ordemServico.temporary">Não</span></b></p>
 							<p ng-show="visualizar">Descri&ccedil;&atilde;o do servi&ccedil;o <b>{{ordemServico.descricao}}</b></p>
 							<p ng-show="visualizar">Previsão de entrega <b>{{ordemServico.previsaoEntrega | date : 'dd/MM/yyyy'}}</b></p>
-							<p ng-show="visualizar">OS provisória <b><span ng-show="ordemServico.temporary">Sim</span><span ng-show="!ordemServico.temporary">Não</span></b></p>
 
 							<div class="control-group" ng-show="!visualizar">
 								<label class="control-label" for="descricao">Descri&ccedil;&atilde;o do servi&ccedil;o</label>
@@ -406,7 +406,7 @@
 						<td>{{os.descricao}}</td>
 						<td>{{os.status}} ({{os.nomeEtapaAtual}})</td>
 						<td>{{os.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
-						<td>{{os.temporary}}</td>
+						<td><span ng-show="os.temporary">Sim</span><span ng-show="!os.temporary">Não</span></td>
 						<td>
 							<a href="#" ng-click="alterar(os)" class="shortcut" style="text-decoration: none;" title="Editar"><i class="shortcut-icon icon-edit"></i></a>
 							&nbsp;
