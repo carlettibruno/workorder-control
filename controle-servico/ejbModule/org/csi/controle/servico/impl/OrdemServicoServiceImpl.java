@@ -75,7 +75,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			String filtro) {
 		try {
 			Sessao session = sessionService.findSession(token);
-			boolean customerAccess = session.getUsuario() instanceof ClienteAcesso;
+			boolean internalAccess = session.getUsuario() instanceof Funcionario;
 
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT o ");
@@ -90,8 +90,8 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 				sql.append(
 						" AND (o.numero like :filtro OR UPPER(o.descricao) like :filtro OR UPPER(o.cliente.nome) like :filtro ) ");
 			}
-			if (customerAccess) {
-				sql.append(" AND (o.temporaryOrder IS NULL or o.temporaryOrder = :temporder) ");
+			if (!internalAccess) {
+				sql.append(" AND (o.temporary IS NULL or o.temporary = :temporder) ");
 			}
 			sql.append("ORDER BY o.idOrdemServico DESC ");
 			Query query = em.createQuery(sql.toString());
@@ -99,7 +99,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			if (filtro != null && !filtro.isEmpty()) {
 				query.setParameter("filtro", "%" + filtro.toUpperCase() + "%");
 			}
-			if (customerAccess) {
+			if (!internalAccess) {
 				query.setParameter("temporder", false);
 			}
 			query.setFirstResult(inicio);
@@ -128,10 +128,9 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			ordemServico.setDataCriacao(new Date());
 			ordemServico.setDataModificacao(new Date());
 			ordemServico.setStatus(Status.ABERTO);
-			Query query = em.createQuery("SELECT se FROM Sessao se JOIN FETCH se.usuario u WHERE se.codigo = :codigo");
-			query.setParameter("codigo", token);
-			Sessao sessao = (Sessao) query.getSingleResult();
-			ordemServico.setFuncionarioCriacao((Funcionario) sessao.getUsuario());
+
+			Sessao session = sessionService.findSession(token);
+			ordemServico.setFuncionarioCriacao((Funcionario) session.getUsuario());
 
 			em.persist(ordemServico);
 			RetornoServico<Etapa> etapa = etapaService.obterEtapaInicial();
@@ -146,7 +145,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 			}
 
 			imprimirOrdemServico(new PrintDTO(ordemServico.getId(), 2));
-			
+
 			return new RetornoServico<Long>(Codigo.SUCESSO, ordemServico.getIdOrdemServico());
 		} catch (Exception e) {
 			e.printStackTrace();

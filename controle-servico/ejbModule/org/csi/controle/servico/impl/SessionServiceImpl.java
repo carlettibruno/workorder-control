@@ -16,8 +16,8 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	public Sessao findSession(String token) {
-		Query query = this.em.createQuery("SELECT s FROM Sessao s WHERE s.codigo = :token");
-		query.setParameter("token", token);
+		Query query = em.createQuery("SELECT se FROM Sessao se JOIN FETCH se.usuario u WHERE se.codigo = :codigo");
+		query.setParameter("codigo", token);
 		Sessao sessao = (Sessao) query.getSingleResult();
 		return sessao;
 	}
